@@ -1,5 +1,6 @@
 package in.plasmado.fragement;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import in.plasmado.HomeActivity;
 import in.plasmado.R;
 import in.plasmado.databinding.FragmentLoginBinding;
 
+import static in.plasmado.MainActivity.sharedpreferences;
 import static in.plasmado.helper.ParamHelper.PASSWORD;
 import static in.plasmado.helper.ParamHelper.PHONE;
 import static in.plasmado.helper.ParentHelper.addFragment;
@@ -56,6 +58,11 @@ public class LoginFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+        if(sharedpreferences.getBoolean("LOGIN",false)){
+           startAct(getActivity(),HomeActivity.class);
+           getActivity().finish();
+        }
 
         mBinding.btnRegister.setOnClickListener(v -> {
             addFragment(Objects.requireNonNull(getActivity()), R.id.flMainContainer, new RegisterFragment());
@@ -99,6 +106,11 @@ public class LoginFragment extends Fragment {
 
             if(!response.equals("null")){
                 startAct(getActivity(), HomeActivity.class);
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putString(PHONE, mBinding.etPhone.getText().toString());
+                editor.putString(PASSWORD, mBinding.etPassword.getText().toString());
+                editor.putBoolean("LOGIN",true);
+                editor.apply();
             }else{
                 Toast.makeText(getActivity(), "Invalid Login", Toast.LENGTH_SHORT).show();
             }

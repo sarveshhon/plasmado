@@ -2,6 +2,8 @@ package in.plasmado;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import in.plasmado.databinding.ActivityMainBinding;
@@ -11,6 +13,7 @@ import static in.plasmado.helper.ParentHelper.replaceFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static SharedPreferences sharedpreferences;
     public ActivityMainBinding mBinding;
 
     @Override
@@ -21,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
         mBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
         replaceFragment(this, R.id.flMainContainer, new LoginFragment());
+        sharedpreferences = getSharedPreferences("plasmado", Context.MODE_PRIVATE);
+
 
 
     }
