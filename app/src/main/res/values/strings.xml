@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">PlasmaDo</string>
+
+
+    //Register
+    <string name="register_tv_intro1">Create a New Account</string>
+    <string name="register_tv_firstName">First Name</string>
+    <string name="register_tv_lastName">Last Name</string>
+    <string name="register_tv_phone">Phone Number</string>
+    <string name="register_tv_password">Password</string>
+    <string name="register_tv_repassword"> Confirm Password</string>
+    <string name="register_tv_state">Enter State</string>
+    <string name="register_tv_district">Enter District</string>
+    <string name="register_tv_label2">Personal Information</string>
+    <string name="register_tv_sp_bg">Select Blood Group</string>
+    <string name="register_tv_sp_gender">Select Gender</string>
+    <string name="register_tv_city">Enter City</string>
+    <string name="register_tv_pincode">Enter Pin Code</string>
+    <string name="register_btn_createAccount">Create Account</string>
+    <string name="register_tv_email">Enter Email</string>
+
+</resources>
