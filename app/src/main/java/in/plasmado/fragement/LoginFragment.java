@@ -2,7 +2,6 @@ package in.plasmado.fragement;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +11,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +41,7 @@ import static in.plasmado.helper.ParentHelper.startAct;
 import static in.plasmado.helper.UrlHelper.BASE_KEY;
 import static in.plasmado.helper.UrlHelper.BASE_URL;
 import static in.plasmado.helper.UrlHelper.LOGIN;
-import static in.plasmado.helper.UrlHelper.REGISTRATION;
+import static in.plasmado.helper.UrlHelper.databaseReference;
 
 public class LoginFragment extends Fragment {
 
@@ -59,9 +65,9 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        if(sharedpreferences.getBoolean("LOGIN",false)){
-           startAct(getActivity(),HomeActivity.class);
-           getActivity().finish();
+        if (sharedpreferences.getBoolean("LOGIN", false)) {
+            startAct(getActivity(), HomeActivity.class);
+            getActivity().finish();
         }
 
         mBinding.btnRegister.setOnClickListener(v -> {
@@ -69,11 +75,11 @@ public class LoginFragment extends Fragment {
         });
 
         mBinding.btnLogin.setOnClickListener(v -> {
-            if(checkFields()){
+            if (checkFields()) {
 
                 checkLogin();
 
-            }else{
+            } else {
                 Toast.makeText(getActivity(), "Complete Fields", Toast.LENGTH_SHORT).show();
             }
         });
@@ -84,47 +90,60 @@ public class LoginFragment extends Fragment {
     private boolean checkFields() {
 
         mBinding.etPhone.getText().toString();
-        if(mBinding.etPhone.getText().toString() != ""){
+        if (mBinding.etPhone.getText().toString() != "") {
 
             mBinding.etPassword.getText().toString();
-            if(mBinding.etPassword.getText().toString() != ""){
+            if (mBinding.etPassword.getText().toString() != "") {
                 return true;
-            }else{
+            } else {
                 return false;
             }
 
-        }else{
+        } else {
             mBinding.etPhone.setError("Complete Field");
             return false;
         }
 
     }
 
-    private void checkLogin(){
+    private void checkLogin() {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL+ LOGIN + BASE_KEY, response -> {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL + LOGIN + BASE_KEY, response -> {
 
-            if(!response.equals("null")){
-                startAct(getActivity(), HomeActivity.class);
-                SharedPreferences.Editor editor = sharedpreferences.edit();
-                editor.putString(PHONE, mBinding.etPhone.getText().toString());
-                editor.putString(PASSWORD, mBinding.etPassword.getText().toString());
-                editor.putBoolean("LOGIN",true);
-                editor.apply();
-            }else{
-                Toast.makeText(getActivity(), "Invalid Login", Toast.LENGTH_SHORT).show();
+            try {
+                JSONArray jsonArray = new JSONArray(response);
+                JSONObject jsonObject = jsonArray.getJSONObject(0);
+                String  uNumber = mBinding.etPhone.getText().toString(),
+                        uPassword = mBinding.etPassword.getText().toString();
+
+                if (jsonObject.getString("phone").equals(uNumber) && jsonObject.getString("password").equals(uPassword)) {
+                    startAct(getActivity(), HomeActivity.class);
+                    getActivity().finish();
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                    editor.putString(PHONE, mBinding.etPhone.getText().toString());
+                    editor.putString(PASSWORD, mBinding.etPassword.getText().toString());
+                    editor.putBoolean("LOGIN", true);
+                    editor.apply();
+
+                } else {
+                    Toast.makeText(getActivity(), "Invalid Login", Toast.LENGTH_SHORT).show();
+                }
+
+
+            } catch (JSONException error){
+
             }
 
         }, error -> {
 
-        }){
+        }) {
             @Nullable
             @Override
             protected Map<String, String> getParams() {
 
-                Map<String, String> map = new HashMap<>(0);
-                map.put(PHONE,encrypt(mBinding.etPhone.getText().toString()));
-                map.put(PASSWORD,encrypt(mBinding.etPassword.getText().toString()));
+                Map<String, String> map = new HashMap<>();
+                map.put(PHONE, mBinding.etPhone.getText().toString());
+                map.put(PASSWORD, mBinding.etPassword.getText().toString());
 
                 return map;
             }

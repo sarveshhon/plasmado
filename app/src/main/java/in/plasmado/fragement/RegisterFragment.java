@@ -17,6 +17,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -40,9 +42,11 @@ import static in.plasmado.helper.ParamHelper.PHONE;
 import static in.plasmado.helper.ParamHelper.PINCODE;
 import static in.plasmado.helper.ParamHelper.STATE;
 import static in.plasmado.helper.ParentHelper.encrypt;
+import static in.plasmado.helper.ParentHelper.timeStamp;
 import static in.plasmado.helper.UrlHelper.BASE_KEY;
 import static in.plasmado.helper.UrlHelper.BASE_URL;
 import static in.plasmado.helper.UrlHelper.REGISTRATION;
+import static in.plasmado.helper.UrlHelper.databaseReference;
 
 public class RegisterFragment extends Fragment {
 
@@ -93,7 +97,6 @@ public class RegisterFragment extends Fragment {
     }
 
     private void registerUser() {
-        String timeStamp = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL + REGISTRATION + BASE_KEY, response -> {
 
             getActivity().getSupportFragmentManager().popBackStack();
@@ -105,9 +108,10 @@ public class RegisterFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() {
 
+
                 Map<String, String> map = new HashMap<>(0);
-                map.put(NAME, encrypt(mBinding.etFirstName.getText().toString() + mBinding.etLastName.getText().toString()));
-                map.put(PHONE, encrypt(mBinding.etPhone.getText().toString()));
+                map.put(NAME, mBinding.etFirstName.getText().toString() + mBinding.etLastName.getText().toString());
+                map.put(PHONE, mBinding.etPhone.getText().toString());
                 map.put(EMAIl, encrypt(mBinding.etEmail.getText().toString()));
                 map.put(AGE, encrypt(mBinding.etAge.getText().toString()));
                 map.put(PINCODE, encrypt(mBinding.etPin.getText().toString()));
@@ -118,7 +122,7 @@ public class RegisterFragment extends Fragment {
                 map.put(GENDER, encrypt(gender[mBinding.spinnerGender.getSelectedItemPosition()]));
                 map.put(BLOODGROUP, encrypt(bloodGroups[mBinding.spinnerBloodGroup.getSelectedItemPosition()]));
                 map.put(DATETIME, timeStamp);
-                map.put(PASSWORD, encrypt(mBinding.etPassword.getText().toString()));
+                map.put(PASSWORD, mBinding.etPassword.getText().toString());
 
 
                 return map;
@@ -212,6 +216,5 @@ public class RegisterFragment extends Fragment {
         }
         return false;
     }
-
 
 }

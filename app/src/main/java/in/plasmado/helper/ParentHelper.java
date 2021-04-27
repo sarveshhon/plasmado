@@ -9,12 +9,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class ParentHelper {
+
+    public static String timeStamp = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date());
 
     public static void replaceFragment(FragmentActivity activity, int layout, Fragment fragment){
         activity.getSupportFragmentManager()
