@@ -10,6 +10,7 @@ public class UserModel {
     String pin;
     String city;
     String district;
+    String landmark;
     String state;
     String gender;
     String bloodgroup;
@@ -19,7 +20,7 @@ public class UserModel {
     public UserModel() {
     }
 
-    public UserModel(String id, String name, String phone, String email, String age, String pin, String city, String district, String state, String gender, String bloodgroup, String datetime, String password) {
+    public UserModel(String id, String name, String phone, String email, String age, String pin, String city, String district, String landmark, String state, String gender, String bloodgroup, String datetime, String password) {
         this.id = id;
         this.name = name;
         this.phone = phone;
@@ -28,6 +29,7 @@ public class UserModel {
         this.pin = pin;
         this.city = city;
         this.district = district;
+        this.landmark = landmark;
         this.state = state;
         this.gender = gender;
         this.bloodgroup = bloodgroup;
@@ -97,6 +99,14 @@ public class UserModel {
 
     public void setDistrict(String district) {
         this.district = district;
+    }
+
+    public String getLandmark() {
+        return landmark;
+    }
+
+    public void setLandmark(String landmark) {
+        this.landmark = landmark;
     }
 
     public String getState() {

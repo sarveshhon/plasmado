@@ -36,7 +36,7 @@
                         android:hint="@string/register_tv_firstName">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edFirstName"
+                            android:id="@+id/etFirstName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textPersonName"
@@ -56,7 +56,7 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
-                            android:id="@+id/edLastName"
+                            android:id="@+id/etLastName"
                             android:layout_height="wrap_content"
                             android:inputType="textPersonName"
                             android:maxLines="1" />
@@ -65,23 +65,54 @@
 
                 </LinearLayout>
 
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:hint="@string/register_tv_phone">
+                    android:layout_height="wrap_content">
 
-                    <com.google.android.material.textfield.TextInputEditText
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
-                        android:id="@+id/etPhone"
-                        android:maxLength="10"
-                        android:maxLines="1" />
+                        android:layout_marginEnd="3dp"
+                        android:layout_weight="1"
+                        android:layout_marginBottom="10dp"
+                        android:hint="@string/register_tv_phone">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:id="@+id/etPhone"
+                            android:maxLength="10"
+                            android:maxLines="1" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginStart="3dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:hint="@string/register_tv_age">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:id="@+id/etAge"
+                            android:maxLength="2"
+                            android:maxLines="1" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
 
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -138,7 +169,7 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
                             android:inputType="textVisiblePassword"
-                            android:id="etConfirmPassword"
+                            android:id="@+id/etConfirmPassword"
                             android:maxLength="12"
                             android:layout_height="wrap_content"
                             android:maxLines="1" />
@@ -217,7 +248,6 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/etState"
                         android:inputType="text"
-                        android:maxLength="1"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -235,6 +265,22 @@
                         android:layout_height="wrap_content"
                         android:inputType="text"
                         android:id="@+id/etDistrict"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:hint="@string/register_tv_landmark">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:id="@+id/etLandmark"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -258,7 +304,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="text"
-                            android:id="etCity"
+                            android:id="@+id/etCity"
                             android:maxLines="1" />
 
                     </com.google.android.material.textfield.TextInputLayout>

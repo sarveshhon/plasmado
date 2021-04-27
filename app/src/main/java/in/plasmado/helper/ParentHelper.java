@@ -1,5 +1,8 @@
 package in.plasmado.helper;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.util.Base64;
 
 import androidx.fragment.app.Fragment;
@@ -50,6 +53,11 @@ public class ParentHelper {
         } catch (Exception e) {
             return text;
         }
+    }
+
+    public static void startAct(Context context, Class activity){
+        Intent i = new Intent(context, activity);
+        context.startActivity(i);
     }
 
 }
