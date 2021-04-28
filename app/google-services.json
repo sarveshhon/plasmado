@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "510375516851",
+    "project_id": "plasmado-eb4d8",
+    "storage_bucket": "plasmado-eb4d8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:510375516851:android:8f2dfcfbf77a0601ebaec6",
+        "android_client_info": {
+          "package_name": "in.plasmado"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "510375516851-p1a7c4023ipn6g5s5keg5l1iv1k93q11.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWPkBJAr-IoLoJgYDe2bCxojESS9_U-5Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "510375516851-p1a7c4023ipn6g5s5keg5l1iv1k93q11.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

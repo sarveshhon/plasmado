@@ -2,6 +2,7 @@ package in.plasmado.fragement;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,6 +88,9 @@ public class RegisterFragment extends Fragment {
 
             if (checkFields()) {
                 registerUser();
+                Toast.makeText(getActivity(), "Creating Account", Toast.LENGTH_SHORT).show();
+                mBinding.btnCreateAccount.setEnabled(false);
+                new Handler().postDelayed(() -> mBinding.btnCreateAccount.setEnabled(true),5000);
             } else {
 
             }
@@ -97,9 +101,10 @@ public class RegisterFragment extends Fragment {
     }
 
     private void registerUser() {
+        getActivity().getSupportFragmentManager().popBackStack();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL + REGISTRATION + BASE_KEY, response -> {
 
-            getActivity().getSupportFragmentManager().popBackStack();
+
 
         }, error -> {
             Log.d("Error", error.getMessage());
@@ -110,17 +115,17 @@ public class RegisterFragment extends Fragment {
 
 
                 Map<String, String> map = new HashMap<>(0);
-                map.put(NAME, mBinding.etFirstName.getText().toString() + mBinding.etLastName.getText().toString());
+                map.put(NAME, mBinding.etFirstName.getText().toString()+" " + mBinding.etLastName.getText().toString());
                 map.put(PHONE, mBinding.etPhone.getText().toString());
-                map.put(EMAIl, encrypt(mBinding.etEmail.getText().toString()));
-                map.put(AGE, encrypt(mBinding.etAge.getText().toString()));
-                map.put(PINCODE, encrypt(mBinding.etPin.getText().toString()));
-                map.put(CITY, encrypt(mBinding.etCity.getText().toString()));
-                map.put(DISTRICT, encrypt(mBinding.etDistrict.getText().toString()));
-                map.put(LANDMARK, encrypt(mBinding.etLandmark.getText().toString()));
-                map.put(STATE, encrypt(mBinding.etState.getText().toString()));
-                map.put(GENDER, encrypt(gender[mBinding.spinnerGender.getSelectedItemPosition()]));
-                map.put(BLOODGROUP, encrypt(bloodGroups[mBinding.spinnerBloodGroup.getSelectedItemPosition()]));
+                map.put(EMAIl, mBinding.etEmail.getText().toString());
+                map.put(AGE, mBinding.etAge.getText().toString());
+                map.put(PINCODE, mBinding.etPin.getText().toString());
+                map.put(CITY, mBinding.etCity.getText().toString());
+                map.put(DISTRICT, mBinding.etDistrict.getText().toString());
+                map.put(LANDMARK, mBinding.etLandmark.getText().toString());
+                map.put(STATE, mBinding.etState.getText().toString());
+                map.put(GENDER, gender[mBinding.spinnerGender.getSelectedItemPosition()]);
+                map.put(BLOODGROUP, bloodGroups[mBinding.spinnerBloodGroup.getSelectedItemPosition()]);
                 map.put(DATETIME, timeStamp);
                 map.put(PASSWORD, mBinding.etPassword.getText().toString());
 
@@ -131,6 +136,8 @@ public class RegisterFragment extends Fragment {
 
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(stringRequest);
+
+
 
     }
 
@@ -217,4 +224,20 @@ public class RegisterFragment extends Fragment {
         return false;
     }
 
+    private void clearFields(){
+
+
+        mBinding.etFirstName.setText("");
+        mBinding.etLastName.setText("");
+        mBinding.etPhone.setText("");
+        mBinding.etPassword.setText("");
+        mBinding.etConfirmPassword.setText("");
+        mBinding.etState.setText("");
+        mBinding.etDistrict.setText("");
+        mBinding.etLandmark.getText().toString();
+        mBinding.etCity.getText().toString();
+        mBinding.etAge.getText().toString();
+        mBinding.etPin.getText().toString();
+
+    }
 }

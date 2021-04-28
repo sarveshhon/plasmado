@@ -13,6 +13,19 @@ import android.view.ViewGroup;
 import in.plasmado.R;
 import in.plasmado.databinding.FragmentProfileBinding;
 
+import static in.plasmado.MainActivity.sharedpreferences;
+import static in.plasmado.helper.ParamHelper.AGE;
+import static in.plasmado.helper.ParamHelper.BLOODGROUP;
+import static in.plasmado.helper.ParamHelper.CITY;
+import static in.plasmado.helper.ParamHelper.DISTRICT;
+import static in.plasmado.helper.ParamHelper.EMAIl;
+import static in.plasmado.helper.ParamHelper.GENDER;
+import static in.plasmado.helper.ParamHelper.LANDMARK;
+import static in.plasmado.helper.ParamHelper.NAME;
+import static in.plasmado.helper.ParamHelper.PHONE;
+import static in.plasmado.helper.ParamHelper.PINCODE;
+import static in.plasmado.helper.ParamHelper.STATE;
+
 
 public class ProfileFragment extends Fragment {
 
@@ -28,6 +41,20 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = FragmentProfileBinding.inflate(getLayoutInflater());
+
+        mBinding.tvName.setText("Name: "+sharedpreferences.getString(NAME,"unknown"));
+        mBinding.tvPhone.setText("Phone: "+sharedpreferences.getString(PHONE,"unknown"));
+        mBinding.tvEmail.setText("Email: "+sharedpreferences.getString(EMAIl,"unknown"));
+        mBinding.tvAge.setText("Age: "+sharedpreferences.getString(AGE,"unknown"));
+        mBinding.tvPin.setText("PinCode: "+sharedpreferences.getString(PINCODE,"unknown"));
+        mBinding.tvCity.setText("City: "+sharedpreferences.getString(CITY,"unknown"));
+        mBinding.tvDistrict.setText("District: "+sharedpreferences.getString(DISTRICT,"unknown"));
+        mBinding.tvLandmark.setText("Landmark: "+sharedpreferences.getString(LANDMARK,"unknown"));
+        mBinding.tvState.setText("State: "+sharedpreferences.getString(STATE,"unknown"));
+        mBinding.tvGender.setText("Gender: "+sharedpreferences.getString(GENDER,"unknown"));
+        mBinding.tvBloodGroup.setText("Blood Group: "+sharedpreferences.getString(BLOODGROUP,"unknown"));
+
+
         return mBinding.getRoot();
 
     }

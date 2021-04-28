@@ -2,6 +2,8 @@ package in.plasmado.fragement;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,8 +35,18 @@ import in.plasmado.R;
 import in.plasmado.databinding.FragmentLoginBinding;
 
 import static in.plasmado.MainActivity.sharedpreferences;
+import static in.plasmado.helper.ParamHelper.AGE;
+import static in.plasmado.helper.ParamHelper.BLOODGROUP;
+import static in.plasmado.helper.ParamHelper.CITY;
+import static in.plasmado.helper.ParamHelper.DISTRICT;
+import static in.plasmado.helper.ParamHelper.EMAIl;
+import static in.plasmado.helper.ParamHelper.GENDER;
+import static in.plasmado.helper.ParamHelper.LANDMARK;
+import static in.plasmado.helper.ParamHelper.NAME;
 import static in.plasmado.helper.ParamHelper.PASSWORD;
 import static in.plasmado.helper.ParamHelper.PHONE;
+import static in.plasmado.helper.ParamHelper.PINCODE;
+import static in.plasmado.helper.ParamHelper.STATE;
 import static in.plasmado.helper.ParentHelper.addFragment;
 import static in.plasmado.helper.ParentHelper.encrypt;
 import static in.plasmado.helper.ParentHelper.startAct;
@@ -76,6 +88,9 @@ public class LoginFragment extends Fragment {
 
         mBinding.btnLogin.setOnClickListener(v -> {
             if (checkFields()) {
+                Toast.makeText(getActivity(), "Checking Credentials", Toast.LENGTH_SHORT).show();
+                mBinding.btnLogin.setEnabled(false);
+                new Handler().postDelayed(() -> mBinding.btnLogin.setEnabled(true),5000);
 
                 checkLogin();
 
@@ -88,14 +103,11 @@ public class LoginFragment extends Fragment {
     }
 
     private boolean checkFields() {
-
-        mBinding.etPhone.getText().toString();
-        if (mBinding.etPhone.getText().toString() != "") {
-
-            mBinding.etPassword.getText().toString();
-            if (mBinding.etPassword.getText().toString() != "") {
+        if (!mBinding.etPhone.getText().toString().equals("")) {
+            if (!mBinding.etPassword.getText().toString().equals("")) {
                 return true;
             } else {
+                mBinding.etPassword.setError("Complete Field");
                 return false;
             }
 
@@ -116,26 +128,35 @@ public class LoginFragment extends Fragment {
                 String  uNumber = mBinding.etPhone.getText().toString(),
                         uPassword = mBinding.etPassword.getText().toString();
 
-                if (jsonObject.getString("phone").equals(uNumber) && jsonObject.getString("password").equals(uPassword)) {
+                if (jsonObject.getString(PHONE).equals(uNumber) && jsonObject.getString(PASSWORD).equals(uPassword)) {
+                    Toast.makeText(getActivity(), "Login Successful", Toast.LENGTH_SHORT).show();
                     startAct(getActivity(), HomeActivity.class);
                     getActivity().finish();
+
                     SharedPreferences.Editor editor = sharedpreferences.edit();
                     editor.putString(PHONE, mBinding.etPhone.getText().toString());
                     editor.putString(PASSWORD, mBinding.etPassword.getText().toString());
+                    editor.putString(NAME, jsonObject.getString(NAME));
+                    editor.putString(EMAIl, jsonObject.getString(EMAIl));
+                    editor.putString(AGE, jsonObject.getString(AGE));
+                    editor.putString(PINCODE, jsonObject.getString(PINCODE));
+                    editor.putString(CITY, jsonObject.getString(CITY));
+                    editor.putString(DISTRICT, jsonObject.getString(DISTRICT));
+                    editor.putString(LANDMARK, jsonObject.getString(LANDMARK));
+                    editor.putString(STATE, jsonObject.getString(STATE));
+                    editor.putString(GENDER, jsonObject.getString(GENDER));
+                    editor.putString(BLOODGROUP, jsonObject.getString(BLOODGROUP));
                     editor.putBoolean("LOGIN", true);
                     editor.apply();
 
-                } else {
-                    Toast.makeText(getActivity(), "Invalid Login", Toast.LENGTH_SHORT).show();
+                }else {
                 }
 
-
             } catch (JSONException error){
-
+                Toast.makeText(getContext(), "Invalid Login", Toast.LENGTH_SHORT).show();
             }
 
         }, error -> {
-
         }) {
             @Nullable
             @Override

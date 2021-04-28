@@ -2,7 +2,7 @@ package in.plasmado.model;
 
 import static in.plasmado.helper.ParentHelper.convertMongodbObjToString;
 
-public class RequestModel {
+public class HistoryModel {
 
     String _id;
     String name;
@@ -17,11 +17,20 @@ public class RequestModel {
     String gender;
     String bloodgroup;
     String datetime;
+    String stage;
 
-    public RequestModel() {
+    public HistoryModel() {
     }
 
-    public RequestModel(String _id, String name, String phone, String email, String age, String pin, String city, String district, String landmark, String state, String gender, String bloodgroup, String datetime) {
+    public String getStage() {
+        return stage;
+    }
+
+    public void setStage(String stage) {
+        this.stage = stage;
+    }
+
+    public HistoryModel(String _id, String name, String phone, String email, String age, String pin, String city, String district, String landmark, String state, String gender, String bloodgroup, String datetime, String stage) {
         this._id = _id;
         this.name = name;
         this.phone = phone;
@@ -35,6 +44,7 @@ public class RequestModel {
         this.gender = gender;
         this.bloodgroup = bloodgroup;
         this.datetime = datetime;
+        this.stage = stage;
     }
 
     public String get_id() {

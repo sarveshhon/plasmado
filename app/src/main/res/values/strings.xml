@@ -3,7 +3,6 @@
 
 
     //Register
-    <string name="register_tv_intro1">Create a New Account</string>
     <string name="register_tv_firstName">First Name</string>
     <string name="register_tv_lastName">Last Name</string>
     <string name="register_tv_phone">Phone Number</string>
@@ -13,14 +12,15 @@
     <string name="register_tv_state">Enter State</string>
     <string name="register_tv_district">Enter District</string>
     <string name="register_tv_landmark">Enter Landmark</string>
-    <string name="register_tv_label2">Personal Information</string>
     <string name="register_tv_sp_bg">Select Blood Group</string>
     <string name="register_tv_sp_gender">Select Gender</string>
     <string name="register_tv_city">Enter City</string>
     <string name="register_tv_pincode">Enter Pin Code</string>
     <string name="register_btn_createAccount">Create Account</string>
     <string name="register_tv_email">Enter Email</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="dialog_request">Do you want to Request for Plasma for your Blood Group?</string>
+
 
 </resources>

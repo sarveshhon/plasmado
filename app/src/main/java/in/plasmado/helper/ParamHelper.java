@@ -15,7 +15,8 @@ public class ParamHelper {
     public static String CITY = "city";
     public static String PINCODE = "pin";
     public static String DATETIME = "datetime";
-    public static String ID = "_ID";
+    public static String ID = "_id";
     public static String KEY = "secret";
+    public static String STAGE = "stage";
 
 }

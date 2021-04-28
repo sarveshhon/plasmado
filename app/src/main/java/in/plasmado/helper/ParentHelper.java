@@ -1,9 +1,11 @@
 package in.plasmado.helper;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Base64;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -16,9 +18,12 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import in.plasmado.R;
+
 public class ParentHelper {
 
-    public static String timeStamp = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date());
+    public static String timeStamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date());
+    public static final SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
     public static void replaceFragment(FragmentActivity activity, int layout, Fragment fragment){
         activity.getSupportFragmentManager()
@@ -62,6 +67,22 @@ public class ParentHelper {
     public static void startAct(Context context, Class activity){
         Intent i = new Intent(context, activity);
         context.startActivity(i);
+    }
+
+
+    // Show Custom Dialog
+    public static void showCustomDialog(Dialog dialog, String txt, int layout){
+        dialog.setContentView(layout);
+        dialog.setCancelable(false);
+        TextView tvTitle = dialog.findViewById(R.id.tvTitle);
+        tvTitle.setText(txt);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+    }
+
+
+    // Method to Convert MongoDB Object to String
+    public static String convertMongodbObjToString(String id){
+        return id.substring(id.indexOf('"')+8,id.lastIndexOf('"'));
     }
 
 }
