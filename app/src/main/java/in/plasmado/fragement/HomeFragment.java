@@ -28,9 +28,11 @@ import java.util.List;
 import java.util.Map;
 
 import in.plasmado.R;
+import in.plasmado.adapter.HistoryAdapter;
 import in.plasmado.adapter.RequestAdapter;
 import in.plasmado.databinding.FragmentHomeBinding;
 import in.plasmado.helper.ParamHelper;
+import in.plasmado.model.HistoryModel;
 import in.plasmado.model.RequestModel;
 
 import static in.plasmado.MainActivity.sharedpreferences;
@@ -53,7 +55,9 @@ import static in.plasmado.helper.ParentHelper.showCustomDialog;
 import static in.plasmado.helper.ParentHelper.timeStamp;
 import static in.plasmado.helper.UrlHelper.BASE_KEY;
 import static in.plasmado.helper.UrlHelper.BASE_URL;
+import static in.plasmado.helper.UrlHelper.HISTORY;
 import static in.plasmado.helper.UrlHelper.REQUEST;
+import static in.plasmado.helper.UrlHelper.databaseReference;
 
 public class HomeFragment extends Fragment {
 
@@ -62,6 +66,8 @@ public class HomeFragment extends Fragment {
     Dialog dialog;
 
     List<RequestModel> list = new ArrayList<>();
+
+    private static int count = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,6 +81,7 @@ public class HomeFragment extends Fragment {
         mBinding = FragmentHomeBinding.inflate(getLayoutInflater());
 
         loadRequestData();
+        checkRequestAvailable();
 
         dialog = new Dialog(getActivity());
 
@@ -99,7 +106,6 @@ public class HomeFragment extends Fragment {
         });
 
         mBinding.cvRequest.setOnClickListener(v -> {
-
             dialog.show();
 
         });
@@ -195,5 +201,44 @@ public class HomeFragment extends Fragment {
 
 
     }
+
+
+    public void checkRequestAvailable(){
+        list.clear();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL+ HISTORY +BASE_KEY, response -> {
+
+            try {
+                JSONArray jsonArray = new JSONArray(response);
+                for(int i=0; i<jsonArray.length(); i++){
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                    if(jsonObject.getString("stage").equals("true")){
+                        count ++;
+                    }
+
+
+                }
+
+
+            }catch (Exception e){
+
+            }
+        }, error -> {
+
+        }){
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String > map = new HashMap<>();
+                map.put(PHONE,sharedpreferences.getString(PHONE,"unknown"));
+
+                return map;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        requestQueue.add(stringRequest);
+    }
+
 
 }

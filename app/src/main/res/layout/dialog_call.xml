@@ -44,9 +44,7 @@
             android:gravity="center"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
-            android:text="Request Blood"
+            android:text="Call Now"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="16sp" />
@@ -62,10 +60,8 @@
             android:fontFamily="sans-serif"
             android:gravity="center"
             android:paddingTop="8dp"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
             android:paddingBottom="8dp"
-            android:text="Cancle Request"
+            android:text="Cancel Call"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="16sp" />

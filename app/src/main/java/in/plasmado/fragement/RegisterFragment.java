@@ -3,7 +3,9 @@ package in.plasmado.fragement;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +20,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,12 +40,10 @@ import static in.plasmado.helper.ParamHelper.PASSWORD;
 import static in.plasmado.helper.ParamHelper.PHONE;
 import static in.plasmado.helper.ParamHelper.PINCODE;
 import static in.plasmado.helper.ParamHelper.STATE;
-import static in.plasmado.helper.ParentHelper.encrypt;
 import static in.plasmado.helper.ParentHelper.timeStamp;
 import static in.plasmado.helper.UrlHelper.BASE_KEY;
 import static in.plasmado.helper.UrlHelper.BASE_URL;
 import static in.plasmado.helper.UrlHelper.REGISTRATION;
-import static in.plasmado.helper.UrlHelper.databaseReference;
 
 public class RegisterFragment extends Fragment {
 
@@ -56,7 +52,10 @@ public class RegisterFragment extends Fragment {
 
     String bloodGroups[] = {"Select Blood", "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"};
     String gender[] = {"Select Gender", "Male", "Female", "Trans"};
-    ArrayAdapter adapterBloodGroup, adapterGender;
+    String states[] = {"Select State", "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh",
+            "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra","Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha","Punjab","Rajasthan",
+            "Sikkim", "Tamil Nadu","Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Andaman and Nicobar", "Chandigarh", "Dadra and Nagar Haveli", "Delhi", "Ladakh", "Lakshadweep", "Jammu and Kashmir", "Puducherry"};
+    ArrayAdapter adapterBloodGroup, adapterGender, adapterStates;
 
     private FragmentRegisterBinding mBinding;
 
@@ -84,13 +83,16 @@ public class RegisterFragment extends Fragment {
         adapterGender = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, gender);
         mBinding.spinnerGender.setAdapter(adapterGender);
 
+        adapterStates = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, states);
+        mBinding.spinnerStates.setAdapter(adapterStates);
+
         mBinding.btnCreateAccount.setOnClickListener(v -> {
 
             if (checkFields()) {
                 registerUser();
                 Toast.makeText(getActivity(), "Creating Account", Toast.LENGTH_SHORT).show();
                 mBinding.btnCreateAccount.setEnabled(false);
-                new Handler().postDelayed(() -> mBinding.btnCreateAccount.setEnabled(true),5000);
+                new Handler().postDelayed(() -> mBinding.btnCreateAccount.setEnabled(true), 5000);
             } else {
 
             }
@@ -105,7 +107,6 @@ public class RegisterFragment extends Fragment {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL + REGISTRATION + BASE_KEY, response -> {
 
 
-
         }, error -> {
             Log.d("Error", error.getMessage());
         }) {
@@ -115,7 +116,7 @@ public class RegisterFragment extends Fragment {
 
 
                 Map<String, String> map = new HashMap<>(0);
-                map.put(NAME, mBinding.etFirstName.getText().toString()+" " + mBinding.etLastName.getText().toString());
+                map.put(NAME, mBinding.etFirstName.getText().toString() + " " + mBinding.etLastName.getText().toString());
                 map.put(PHONE, mBinding.etPhone.getText().toString());
                 map.put(EMAIl, mBinding.etEmail.getText().toString());
                 map.put(AGE, mBinding.etAge.getText().toString());
@@ -123,7 +124,7 @@ public class RegisterFragment extends Fragment {
                 map.put(CITY, mBinding.etCity.getText().toString());
                 map.put(DISTRICT, mBinding.etDistrict.getText().toString());
                 map.put(LANDMARK, mBinding.etLandmark.getText().toString());
-                map.put(STATE, mBinding.etState.getText().toString());
+                map.put(STATE, states[mBinding.spinnerStates.getSelectedItemPosition()]);
                 map.put(GENDER, gender[mBinding.spinnerGender.getSelectedItemPosition()]);
                 map.put(BLOODGROUP, bloodGroups[mBinding.spinnerBloodGroup.getSelectedItemPosition()]);
                 map.put(DATETIME, timeStamp);
@@ -138,7 +139,6 @@ public class RegisterFragment extends Fragment {
         requestQueue.add(stringRequest);
 
 
-
     }
 
     private boolean checkFields() {
@@ -148,12 +148,12 @@ public class RegisterFragment extends Fragment {
         String etPhone = mBinding.etPhone.getText().toString();
         String etPassword = mBinding.etPassword.getText().toString();
         String etConfirmPassword = mBinding.etConfirmPassword.getText().toString();
-        String etState = mBinding.etState.getText().toString();
         String etDistrict = mBinding.etDistrict.getText().toString();
         String etLandmark = mBinding.etLandmark.getText().toString();
         String etCity = mBinding.etCity.getText().toString();
         String etAge = mBinding.etAge.getText().toString();
         String etPin = mBinding.etPin.getText().toString();
+        String etEmail = mBinding.etEmail.getText().toString();
 
         if (!etFirstName.equals("")) {
             if (!etLastName.equals("")) {
@@ -161,7 +161,7 @@ public class RegisterFragment extends Fragment {
                     if (!etPassword.equals("")) {
                         if (!etConfirmPassword.equals("")) {
                             if (etPassword.equals(etConfirmPassword)) {
-                                if (!etState.equals("")) {
+                                if (mBinding.spinnerStates.getSelectedItemPosition() != 0) {
                                     if (!etDistrict.equals("")) {
                                         if (!etLandmark.equals("")) {
                                             if (!etCity.equals("")) {
@@ -169,7 +169,15 @@ public class RegisterFragment extends Fragment {
                                                     if (mBinding.spinnerBloodGroup.getSelectedItemPosition() != 0) {
                                                         if (mBinding.spinnerGender.getSelectedItemPosition() != 0) {
                                                             if (!etAge.equals("")) {
-                                                                return true;
+                                                                if (isValidEmail(etEmail)) {
+                                                                    if (etPhone.length() == 10) {
+                                                                        return true;
+                                                                    } else {
+                                                                        mBinding.etPhone.setError("Enter 10 Digit Number");
+                                                                    }
+                                                                } else {
+                                                                    mBinding.etEmail.setError("Enter Valid Email");
+                                                                }
                                                             } else {
                                                                 mBinding.etAge.setError("Enter Age");
                                                             }
@@ -198,7 +206,7 @@ public class RegisterFragment extends Fragment {
                                     }
 
                                 } else {
-                                    mBinding.etState.setError("Enter District Password");
+                                    Toast.makeText(getActivity(), "Select State or Union Territory", Toast.LENGTH_SHORT).show();
                                 }
                             } else {
                                 mBinding.etConfirmPassword.setError("Enter Same Password");
@@ -224,7 +232,7 @@ public class RegisterFragment extends Fragment {
         return false;
     }
 
-    private void clearFields(){
+    private void clearFields() {
 
 
         mBinding.etFirstName.setText("");
@@ -232,12 +240,15 @@ public class RegisterFragment extends Fragment {
         mBinding.etPhone.setText("");
         mBinding.etPassword.setText("");
         mBinding.etConfirmPassword.setText("");
-        mBinding.etState.setText("");
         mBinding.etDistrict.setText("");
         mBinding.etLandmark.getText().toString();
         mBinding.etCity.getText().toString();
         mBinding.etAge.getText().toString();
         mBinding.etPin.getText().toString();
 
+    }
+
+    public static boolean isValidEmail(CharSequence target) {
+        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
     }
 }

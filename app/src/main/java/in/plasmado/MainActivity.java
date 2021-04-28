@@ -1,10 +1,10 @@
 package in.plasmado;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import in.plasmado.databinding.ActivityMainBinding;
 import in.plasmado.fragement.LoginFragment;
@@ -27,7 +27,5 @@ public class MainActivity extends AppCompatActivity {
         sharedpreferences = getSharedPreferences("plasmado", Context.MODE_PRIVATE);
 
 
-
     }
-
 }

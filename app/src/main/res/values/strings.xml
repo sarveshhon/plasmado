@@ -9,7 +9,6 @@
     <string name="register_tv_age">Age </string>
     <string name="register_tv_password">Password</string>
     <string name="register_tv_repassword"> Confirm Password</string>
-    <string name="register_tv_state">Enter State</string>
     <string name="register_tv_district">Enter District</string>
     <string name="register_tv_landmark">Enter Landmark</string>
     <string name="register_tv_sp_bg">Select Blood Group</string>
@@ -20,7 +19,8 @@
     <string name="register_tv_email">Enter Email</string>
 
 
-    <string name="dialog_request">Do you want to Request for Plasma for your Blood Group?</string>
+    <string name="dialog_request">Are you sure you want to Place a Request for Plasma?</string>
+    <string name="dialog_call">Are you sure you want to Call and Donate Plasma?</string>
 
 
 </resources>

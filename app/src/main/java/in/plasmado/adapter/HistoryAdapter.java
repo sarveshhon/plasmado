@@ -110,10 +110,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         });
 
         holder.btnCancle.setOnClickListener(v -> {
+            holder.llBtn.setVisibility(View.GONE);
             cancleRequest( list.get(position).get_id());
             Toast.makeText(context, "Request Canceled", Toast.LENGTH_SHORT).show();
         });
         holder.btnCompleted.setOnClickListener(v -> {
+            holder.llBtn.setVisibility(View.GONE);
             completeRequest( list.get(position).get_id());
             Toast.makeText(context, "Request Completed", Toast.LENGTH_SHORT).show();
         });
