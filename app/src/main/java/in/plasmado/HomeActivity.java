@@ -1,10 +1,12 @@
 package in.plasmado;
 
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,12 +15,22 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import in.plasmado.fragement.HomeFragment;
 
 import static in.plasmado.MainActivity.sharedpreferences;
 import static in.plasmado.helper.ParentHelper.replaceFragment;
+import static in.plasmado.helper.ParentHelper.showCustomDialog;
 
 public class HomeActivity extends AppCompatActivity {
+
+    Dialog dialog;
+    DatabaseReference db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +38,39 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         replaceFragment(HomeActivity.this, R.id.flHomeContainer, new HomeFragment());
+
+        dialog = new Dialog(HomeActivity.this);
+
+        // Configure Dialog Propertied
+        showCustomDialog(dialog, getResources().getString(R.string.app_update), R.layout.dialog_update);
+        dialog.findViewById(R.id.btnYes).setOnClickListener(v -> {
+            Uri uri = Uri.parse("market://details?id=" + getPackageName());
+            Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
+            try {
+                startActivity(myAppLinkToMarket);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(this, " unable to find market app", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        db = FirebaseDatabase.getInstance().getReference();
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.child("appversion").exists()){
+                    if(!(snapshot.child("appversion").getValue().toString().equals(String.valueOf(BuildConfig.VERSION_CODE)))){
+                        dialog.show();
+                    }else{
+                        dialog.dismiss();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
 
     }
@@ -42,14 +87,14 @@ public class HomeActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.m1:
                 try {
-                    String applink = "✅ *Download App* ✅\nhttps://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
-                    String applink_h = "✅ *ऐप डाउनलोड करें* ✅\nhttps://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
+                    String applink = "✅ *Download App* ✅\nhttps://play.google.com/store/apps/details?id="+ getPackageName();
+                    String applink_h = "✅ *ऐप डाउनलोड करें* ✅\nhttps://play.google.com/store/apps/details?id="+ getPackageName();
                     String shareMessage = getResources().getString(R.string.sharetext);
                     String shareMessage_h = getResources().getString(R.string.sharetext_h);
                     Intent shareIntent = new Intent(Intent.ACTION_SEND);
                     shareIntent.setType("text/plain");
                     shareIntent.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.app_name));
-                    shareMessage = shareMessage + applink+"\n\n"+shareMessage_h + applink_h;
+                    shareMessage = shareMessage + applink + "\n\n" + shareMessage_h + applink_h;
                     shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
                     startActivity(Intent.createChooser(shareIntent, "choose one"));
                 } catch (Exception e) {
@@ -96,6 +141,10 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(browserIntent2);
                 break;
             case R.id.m7:
+                Intent intent3 = new Intent(HomeActivity.this, AboutActivity.class);
+                startActivity(intent3);
+                break;
+            case R.id.m8:
                 SharedPreferences.Editor editor = sharedpreferences.edit();
                 editor.putBoolean("LOGIN", false);
                 editor.apply();

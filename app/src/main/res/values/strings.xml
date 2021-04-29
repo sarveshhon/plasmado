@@ -28,6 +28,11 @@
     <string name="sharetext_h">"*दूसरों के जीवन को बचाने के लिए अपने रक्त प्लाज्मा का दान करें। इसे दान करें।*\n"</string>
 
 
+    <string name="note">We Strongly Recommend You to Consult with medical professional or your Doctor before taking any Decision.\nकोई भी निर्णय लेने से पहले आप मेडिकल प्रोफेशनल या अपने डॉक्टर से सलाह लें।</string>
+
+    <string name="dev">This App is Develop by an IT Student with Strong Intention of Helping Blood Plasma Recipients. This app connects Donors &amp; Recipients.</string>
+
+    <string name="app_update">New Version of App is Available. Please Update Your App to Latest Version.</string>
 
 
 </resources>
