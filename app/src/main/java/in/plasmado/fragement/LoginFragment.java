@@ -1,9 +1,9 @@
 package in.plasmado.fragement;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +15,8 @@ import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,12 +44,11 @@ import static in.plasmado.helper.ParamHelper.PHONE;
 import static in.plasmado.helper.ParamHelper.PINCODE;
 import static in.plasmado.helper.ParamHelper.STATE;
 import static in.plasmado.helper.ParentHelper.addFragment;
-import static in.plasmado.helper.ParentHelper.encrypt;
+import static in.plasmado.helper.ParentHelper.checkInternet;
 import static in.plasmado.helper.ParentHelper.startAct;
 import static in.plasmado.helper.UrlHelper.BASE_KEY;
 import static in.plasmado.helper.UrlHelper.BASE_URL;
 import static in.plasmado.helper.UrlHelper.LOGIN;
-import static in.plasmado.helper.UrlHelper.databaseReference;
 
 public class LoginFragment extends Fragment {
 
@@ -86,16 +81,33 @@ public class LoginFragment extends Fragment {
             addFragment(Objects.requireNonNull(getActivity()), R.id.flMainContainer, new RegisterFragment());
         });
 
+        mBinding.btnEmailSupport.setOnClickListener(v -> {
+
+            Intent intent=new Intent(Intent.ACTION_SEND);
+            String[] recipients={"plasmadoapp@gmail.com"};
+            intent.putExtra(Intent.EXTRA_EMAIL, recipients);
+            intent.putExtra(Intent.EXTRA_SUBJECT,"PlasmaDo Email Support");
+            intent.putExtra(Intent.EXTRA_TEXT," ");
+            intent.putExtra(Intent.EXTRA_CC,"mailcc@gmail.com");
+            intent.setType("text/html");
+            intent.setPackage("com.google.android.gm");
+            startActivity(Intent.createChooser(intent, "Send mail"));
+        });
+
         mBinding.btnLogin.setOnClickListener(v -> {
-            if (checkFields()) {
-                Toast.makeText(getActivity(), "Checking Credentials", Toast.LENGTH_SHORT).show();
-                mBinding.btnLogin.setEnabled(false);
-                new Handler().postDelayed(() -> mBinding.btnLogin.setEnabled(true),5000);
+            if(checkInternet(getContext())){
+                if (checkFields()) {
+                    checkLogin();
+                    Toast.makeText(getActivity(), "Checking Credentials", Toast.LENGTH_SHORT).show();
+                    mBinding.btnLogin.setEnabled(false);
+                    new Handler().postDelayed(() -> mBinding.btnLogin.setEnabled(true), 5000);
 
-                checkLogin();
 
-            } else {
-                Toast.makeText(getActivity(), "Complete Fields", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "Complete Fields", Toast.LENGTH_SHORT).show();
+                }
+            }else{
+                Toast.makeText(getContext(), "Please Turn On Internet Connection.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -125,7 +137,7 @@ public class LoginFragment extends Fragment {
             try {
                 JSONArray jsonArray = new JSONArray(response);
                 JSONObject jsonObject = jsonArray.getJSONObject(0);
-                String  uNumber = mBinding.etPhone.getText().toString(),
+                String uNumber = mBinding.etPhone.getText().toString(),
                         uPassword = mBinding.etPassword.getText().toString();
 
                 if (jsonObject.getString(PHONE).equals(uNumber) && jsonObject.getString(PASSWORD).equals(uPassword)) {
@@ -149,10 +161,10 @@ public class LoginFragment extends Fragment {
                     editor.putBoolean("LOGIN", true);
                     editor.apply();
 
-                }else {
+                } else {
                 }
 
-            } catch (JSONException error){
+            } catch (JSONException error) {
                 Toast.makeText(getContext(), "Invalid Login", Toast.LENGTH_SHORT).show();
             }
 
@@ -174,6 +186,7 @@ public class LoginFragment extends Fragment {
         requestQueue.add(stringRequest);
 
     }
+
 
 
 }

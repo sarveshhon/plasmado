@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Base64;
 import android.widget.TextView;
 
@@ -83,6 +85,19 @@ public class ParentHelper {
     // Method to Convert MongoDB Object to String
     public static String convertMongodbObjToString(String id){
         return id.substring(id.indexOf('"')+8,id.lastIndexOf('"'));
+    }
+
+    public static boolean checkInternet(Context context){
+        boolean connected = false;
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            return connected = true;
+        }
+        else {
+            return connected = false;
+        }
     }
 
 }

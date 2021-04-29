@@ -17,7 +17,8 @@
     <string name="register_tv_pincode">Enter Pin Code</string>
     <string name="register_btn_createAccount">Create Account</string>
     <string name="register_tv_email">Enter Email</string>
-
+    <string name="tandc">&lt;a href="https://sites.google.com/view/plasmadoapp/home/terms_and_conditions?authuser=0">Terms &amp; Conditions&lt;/a></string>
+    <string name="pp">&lt;a href="https://sites.google.com/view/plasmadoapp/home/privacy-policy?authuser=0">Privacy Policy&lt;/a></string>
 
     <string name="dialog_request">Are you sure you want to Place a Request for Plasma?</string>
     <string name="dialog_call">Are you sure you want to Call and Donate Plasma?</string>

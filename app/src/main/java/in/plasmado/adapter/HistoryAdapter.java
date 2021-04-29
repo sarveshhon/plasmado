@@ -45,6 +45,7 @@ import static in.plasmado.helper.ParamHelper.PHONE;
 import static in.plasmado.helper.ParamHelper.PINCODE;
 import static in.plasmado.helper.ParamHelper.STAGE;
 import static in.plasmado.helper.ParamHelper.STATE;
+import static in.plasmado.helper.ParentHelper.checkInternet;
 import static in.plasmado.helper.ParentHelper.inputFormat;
 import static in.plasmado.helper.ParentHelper.timeStamp;
 import static in.plasmado.helper.UrlHelper.BASE_KEY;
@@ -110,14 +111,22 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         });
 
         holder.btnCancle.setOnClickListener(v -> {
-            holder.llBtn.setVisibility(View.GONE);
-            cancleRequest( list.get(position).get_id());
-            Toast.makeText(context, "Request Canceled", Toast.LENGTH_SHORT).show();
+            if(checkInternet(context)){
+                holder.llBtn.setVisibility(View.GONE);
+                cancleRequest( list.get(position).get_id());
+                Toast.makeText(context, "Request Canceled", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(context, "Please Turn ON Internet Connection.", Toast.LENGTH_SHORT).show();
+            }
         });
         holder.btnCompleted.setOnClickListener(v -> {
-            holder.llBtn.setVisibility(View.GONE);
-            completeRequest( list.get(position).get_id());
-            Toast.makeText(context, "Request Completed", Toast.LENGTH_SHORT).show();
+            if(checkInternet(context)) {
+                holder.llBtn.setVisibility(View.GONE);
+                completeRequest(list.get(position).get_id());
+                Toast.makeText(context, "Request Completed", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(context, "Please Turn ON Internet Connection.", Toast.LENGTH_SHORT).show();
+            }
         });
 
     }

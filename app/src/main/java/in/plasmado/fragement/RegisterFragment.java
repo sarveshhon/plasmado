@@ -3,7 +3,9 @@ package in.plasmado.fragement;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Html;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -40,6 +42,7 @@ import static in.plasmado.helper.ParamHelper.PASSWORD;
 import static in.plasmado.helper.ParamHelper.PHONE;
 import static in.plasmado.helper.ParamHelper.PINCODE;
 import static in.plasmado.helper.ParamHelper.STATE;
+import static in.plasmado.helper.ParentHelper.checkInternet;
 import static in.plasmado.helper.ParentHelper.timeStamp;
 import static in.plasmado.helper.UrlHelper.BASE_KEY;
 import static in.plasmado.helper.UrlHelper.BASE_URL;
@@ -86,13 +89,24 @@ public class RegisterFragment extends Fragment {
         adapterStates = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, states);
         mBinding.spinnerStates.setAdapter(adapterStates);
 
+        mBinding.tvAgreement.setText(Html.fromHtml("Agree with our "+getResources().getString(R.string.pp)+" & "+getResources().getString(R.string.tandc)));
+        mBinding.tvAgreement.setMovementMethod(LinkMovementMethod.getInstance());
+
         mBinding.btnCreateAccount.setOnClickListener(v -> {
 
             if (checkFields()) {
-                registerUser();
-                Toast.makeText(getActivity(), "Creating Account", Toast.LENGTH_SHORT).show();
-                mBinding.btnCreateAccount.setEnabled(false);
-                new Handler().postDelayed(() -> mBinding.btnCreateAccount.setEnabled(true), 5000);
+                if(checkInternet(getContext())) {
+                    if(mBinding.cbAgreement.isChecked()){
+                        registerUser();
+                        Toast.makeText(getActivity(), "Creating Account", Toast.LENGTH_SHORT).show();
+                        mBinding.btnCreateAccount.setEnabled(false);
+                        new Handler().postDelayed(() -> mBinding.btnCreateAccount.setEnabled(true), 5000);
+                    }else{
+                        Toast.makeText(getContext(), "Click on Checkbox to Agree.", Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(getContext(), "Please Turn On Internet Connection.", Toast.LENGTH_SHORT).show();
+                }
             } else {
 
             }

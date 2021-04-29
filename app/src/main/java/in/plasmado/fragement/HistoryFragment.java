@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -48,6 +49,7 @@ import static in.plasmado.helper.ParamHelper.PHONE;
 import static in.plasmado.helper.ParamHelper.PINCODE;
 import static in.plasmado.helper.ParamHelper.STAGE;
 import static in.plasmado.helper.ParamHelper.STATE;
+import static in.plasmado.helper.ParentHelper.checkInternet;
 import static in.plasmado.helper.UrlHelper.BASE_KEY;
 import static in.plasmado.helper.UrlHelper.BASE_URL;
 import static in.plasmado.helper.UrlHelper.HISTORY;
@@ -74,8 +76,12 @@ public class HistoryFragment extends Fragment {
         loadHistoryData();
 
         mBinding.swipeRefresh.setOnRefreshListener(() -> {
-            mBinding.swipeRefresh.setRefreshing(true);
-            loadHistoryData();
+            if(checkInternet(getContext())){
+                mBinding.swipeRefresh.setRefreshing(true);
+                loadHistoryData();
+            }else{
+                Toast.makeText(getContext(), "Please Turn ON Internet Connection.", Toast.LENGTH_SHORT).show();
+            }
 
         });
 

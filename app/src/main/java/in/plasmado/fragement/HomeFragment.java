@@ -51,6 +51,7 @@ import static in.plasmado.helper.ParamHelper.PINCODE;
 import static in.plasmado.helper.ParamHelper.STAGE;
 import static in.plasmado.helper.ParamHelper.STATE;
 import static in.plasmado.helper.ParentHelper.addFragment;
+import static in.plasmado.helper.ParentHelper.checkInternet;
 import static in.plasmado.helper.ParentHelper.showCustomDialog;
 import static in.plasmado.helper.ParentHelper.timeStamp;
 import static in.plasmado.helper.UrlHelper.BASE_KEY;
@@ -97,22 +98,37 @@ public class HomeFragment extends Fragment {
         });
 
         mBinding.cvHistory.setOnClickListener(v -> {
-            addFragment(getActivity(), R.id.flHomeContainer, new HistoryFragment());
+            if (checkInternet(getContext())){
+                addFragment(getActivity(), R.id.flHomeContainer, new HistoryFragment());
+            }else{
+                Toast.makeText(getContext(), "Please Turn ON Internet Connection.", Toast.LENGTH_SHORT).show();
+            }
         });
 
         mBinding.cvProfile.setOnClickListener(v -> {
-
-            addFragment(getActivity(), R.id.flHomeContainer, new ProfileFragment());
+            if(checkInternet(getContext())) {
+                addFragment(getActivity(), R.id.flHomeContainer, new ProfileFragment());
+            }else {
+                Toast.makeText(getContext(), "Please Turn ON Internet Connection.", Toast.LENGTH_SHORT).show();
+            }
         });
 
         mBinding.cvRequest.setOnClickListener(v -> {
-            dialog.show();
+            if(checkInternet(getContext())) {
+                dialog.show();
+            }else {
+                Toast.makeText(getContext(), "Please Turn ON Internet Connection.", Toast.LENGTH_SHORT).show();
+            }
 
         });
 
         mBinding.swipeRefresh.setOnRefreshListener(() -> {
-            mBinding.swipeRefresh.setRefreshing(true);
-            loadRequestData();
+            if(checkInternet(getContext())) {
+                mBinding.swipeRefresh.setRefreshing(true);
+                loadRequestData();
+            }else{
+                Toast.makeText(getContext(), "Please Turn ON Internet Connection.", Toast.LENGTH_SHORT).show();
+            }
         });
 
         return mBinding.getRoot();
