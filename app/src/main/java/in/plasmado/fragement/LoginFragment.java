@@ -47,6 +47,7 @@ import static in.plasmado.helper.ParamHelper.STATE;
 import static in.plasmado.helper.ParentHelper.addFragment;
 import static in.plasmado.helper.ParentHelper.checkInternet;
 import static in.plasmado.helper.ParentHelper.convertMongodbObjToString;
+import static in.plasmado.helper.ParentHelper.encrypt;
 import static in.plasmado.helper.ParentHelper.startAct;
 import static in.plasmado.helper.UrlHelper.BASE_KEY;
 import static in.plasmado.helper.UrlHelper.BASE_URL;
@@ -142,14 +143,14 @@ public class LoginFragment extends Fragment {
                 String uNumber = mBinding.etPhone.getText().toString(),
                         uPassword = mBinding.etPassword.getText().toString();
 
-                if (jsonObject.getString(PHONE).equals(uNumber) && jsonObject.getString(PASSWORD).equals(uPassword)) {
+                if (jsonObject.getString(PHONE).equals(uNumber) && jsonObject.getString(PASSWORD).equals(encrypt(uPassword))) {
                     Toast.makeText(getActivity(), "Login Successful", Toast.LENGTH_SHORT).show();
                     startAct(getActivity(), HomeActivity.class);
                     getActivity().finish();
 
                     SharedPreferences.Editor editor = sharedpreferences.edit();
-                    editor.putString(PHONE, mBinding.etPhone.getText().toString());
-                    editor.putString(PASSWORD, mBinding.etPassword.getText().toString());
+                    editor.putString(PHONE, jsonObject.getString(PHONE));
+                    editor.putString(PASSWORD, jsonObject.getString(PASSWORD));
                     editor.putString(NAME, jsonObject.getString(NAME));
                     editor.putString(ID, convertMongodbObjToString(jsonObject.getString(ID)));
                     editor.putString(EMAIl, jsonObject.getString(EMAIl));
@@ -179,7 +180,7 @@ public class LoginFragment extends Fragment {
 
                 Map<String, String> map = new HashMap<>();
                 map.put(PHONE, mBinding.etPhone.getText().toString());
-                map.put(PASSWORD, mBinding.etPassword.getText().toString());
+                map.put(PASSWORD, encrypt(mBinding.etPassword.getText().toString()));
 
                 return map;
             }

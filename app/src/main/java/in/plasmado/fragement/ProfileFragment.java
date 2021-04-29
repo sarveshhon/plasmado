@@ -28,6 +28,7 @@ import static in.plasmado.helper.ParamHelper.NAME;
 import static in.plasmado.helper.ParamHelper.PHONE;
 import static in.plasmado.helper.ParamHelper.PINCODE;
 import static in.plasmado.helper.ParamHelper.STATE;
+import static in.plasmado.helper.ParentHelper.decrypt;
 import static in.plasmado.helper.ParentHelper.startAct;
 
 
@@ -48,14 +49,14 @@ public class ProfileFragment extends Fragment {
 
         mBinding.tvName.setText("Name: "+sharedpreferences.getString(NAME,"unknown"));
         mBinding.tvPhone.setText("Phone: "+sharedpreferences.getString(PHONE,"unknown"));
-        mBinding.tvEmail.setText("Email: "+sharedpreferences.getString(EMAIl,"unknown"));
-        mBinding.tvAge.setText("Age: "+sharedpreferences.getString(AGE,"unknown"));
-        mBinding.tvPin.setText("PinCode: "+sharedpreferences.getString(PINCODE,"unknown"));
-        mBinding.tvCity.setText("City: "+sharedpreferences.getString(CITY,"unknown"));
-        mBinding.tvDistrict.setText("District: "+sharedpreferences.getString(DISTRICT,"unknown"));
-        mBinding.tvLandmark.setText("Landmark: "+sharedpreferences.getString(LANDMARK,"unknown"));
-        mBinding.tvState.setText("State: "+sharedpreferences.getString(STATE,"unknown"));
-        mBinding.tvGender.setText("Gender: "+sharedpreferences.getString(GENDER,"unknown"));
+        mBinding.tvEmail.setText("Email: "+decrypt(sharedpreferences.getString(EMAIl,"unknown")));
+        mBinding.tvAge.setText("Age: "+decrypt(sharedpreferences.getString(AGE,"unknown")));
+        mBinding.tvPin.setText("PinCode: "+decrypt(sharedpreferences.getString(PINCODE,"unknown")));
+        mBinding.tvCity.setText("City: "+decrypt(sharedpreferences.getString(CITY,"unknown")));
+        mBinding.tvDistrict.setText("District: "+decrypt(sharedpreferences.getString(DISTRICT,"unknown")));
+        mBinding.tvLandmark.setText("Landmark: "+decrypt(sharedpreferences.getString(LANDMARK,"unknown")));
+        mBinding.tvState.setText("State: "+decrypt(sharedpreferences.getString(STATE,"unknown")));
+        mBinding.tvGender.setText("Gender: "+decrypt(sharedpreferences.getString(GENDER,"unknown")));
         mBinding.tvBloodGroup.setText("Blood Group: "+sharedpreferences.getString(BLOODGROUP,"unknown"));
 
         return mBinding.getRoot();

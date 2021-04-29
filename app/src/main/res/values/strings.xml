@@ -24,4 +24,10 @@
     <string name="dialog_call">Are you sure you want to Call and Donate Plasma?</string>
 
 
+    <string name="sharetext">"*Save Life's of Other by Donating Blood Plasma. Donate it.*\n"</string>
+    <string name="sharetext_h">"*दूसरों के जीवन को बचाने के लिए अपने रक्त प्लाज्मा का दान करें। इसे दान करें।*\n"</string>
+
+
+
+
 </resources>

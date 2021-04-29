@@ -1,6 +1,7 @@
 package in.plasmado.model;
 
 import static in.plasmado.helper.ParentHelper.convertMongodbObjToString;
+import static in.plasmado.helper.ParentHelper.decrypt;
 
 public class RequestModel {
 
@@ -62,7 +63,7 @@ public class RequestModel {
     }
 
     public String getEmail() {
-        return email;
+        return decrypt(email);
     }
 
     public void setEmail(String email) {
@@ -70,7 +71,7 @@ public class RequestModel {
     }
 
     public String getAge() {
-        return age;
+        return decrypt(age);
     }
 
     public void setAge(String age) {
@@ -78,7 +79,7 @@ public class RequestModel {
     }
 
     public String getPin() {
-        return pin;
+        return decrypt(pin);
     }
 
     public void setPin(String pin) {
@@ -86,7 +87,7 @@ public class RequestModel {
     }
 
     public String getCity() {
-        return city;
+        return decrypt(city);
     }
 
     public void setCity(String city) {
@@ -94,7 +95,7 @@ public class RequestModel {
     }
 
     public String getDistrict() {
-        return district;
+        return decrypt(district);
     }
 
     public void setDistrict(String district) {
@@ -102,7 +103,7 @@ public class RequestModel {
     }
 
     public String getLandmark() {
-        return landmark;
+        return decrypt(landmark);
     }
 
     public void setLandmark(String landmark) {
@@ -110,7 +111,7 @@ public class RequestModel {
     }
 
     public String getState() {
-        return state;
+        return decrypt(state);
     }
 
     public void setState(String state) {
@@ -118,7 +119,7 @@ public class RequestModel {
     }
 
     public String getGender() {
-        return gender;
+        return decrypt(gender);
     }
 
     public void setGender(String gender) {

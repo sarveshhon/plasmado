@@ -43,6 +43,7 @@ import static in.plasmado.helper.ParamHelper.PHONE;
 import static in.plasmado.helper.ParamHelper.PINCODE;
 import static in.plasmado.helper.ParamHelper.STATE;
 import static in.plasmado.helper.ParentHelper.checkInternet;
+import static in.plasmado.helper.ParentHelper.encrypt;
 import static in.plasmado.helper.ParentHelper.getTimestamp;
 import static in.plasmado.helper.UrlHelper.BASE_KEY;
 import static in.plasmado.helper.UrlHelper.BASE_URL;
@@ -132,17 +133,17 @@ public class RegisterFragment extends Fragment {
                 Map<String, String> map = new HashMap<>(0);
                 map.put(NAME, mBinding.etFirstName.getText().toString() + " " + mBinding.etLastName.getText().toString());
                 map.put(PHONE, mBinding.etPhone.getText().toString());
-                map.put(EMAIl, mBinding.etEmail.getText().toString());
-                map.put(AGE, mBinding.etAge.getText().toString());
-                map.put(PINCODE, mBinding.etPin.getText().toString());
-                map.put(CITY, mBinding.etCity.getText().toString());
-                map.put(DISTRICT, mBinding.etDistrict.getText().toString());
-                map.put(LANDMARK, mBinding.etLandmark.getText().toString());
-                map.put(STATE, states[mBinding.spinnerStates.getSelectedItemPosition()]);
-                map.put(GENDER, gender[mBinding.spinnerGender.getSelectedItemPosition()]);
+                map.put(EMAIl, encrypt(mBinding.etEmail.getText().toString()));
+                map.put(AGE, encrypt(mBinding.etAge.getText().toString()));
+                map.put(PINCODE, encrypt(mBinding.etPin.getText().toString()));
+                map.put(CITY, encrypt(mBinding.etCity.getText().toString()));
+                map.put(DISTRICT, encrypt(mBinding.etDistrict.getText().toString()));
+                map.put(LANDMARK, encrypt(mBinding.etLandmark.getText().toString()));
+                map.put(STATE, encrypt(states[mBinding.spinnerStates.getSelectedItemPosition()]));
+                map.put(GENDER, encrypt(gender[mBinding.spinnerGender.getSelectedItemPosition()]));
                 map.put(BLOODGROUP, bloodGroups[mBinding.spinnerBloodGroup.getSelectedItemPosition()]);
                 map.put(DATETIME, getTimestamp());
-                map.put(PASSWORD, mBinding.etPassword.getText().toString());
+                map.put(PASSWORD, encrypt(mBinding.etPassword.getText().toString()));
 
 
                 return map;

@@ -13,13 +13,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.BuildConfig;
-
 import in.plasmado.fragement.HomeFragment;
 
 import static in.plasmado.MainActivity.sharedpreferences;
 import static in.plasmado.helper.ParentHelper.replaceFragment;
-import static in.plasmado.helper.ParentHelper.startAct;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -45,11 +42,14 @@ public class HomeActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.m1:
                 try {
+                    String applink = "✅ *Download App* ✅\nhttps://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
+                    String applink_h = "✅ *ऐप डाउनलोड करें* ✅\nhttps://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
+                    String shareMessage = getResources().getString(R.string.sharetext);
+                    String shareMessage_h = getResources().getString(R.string.sharetext_h);
                     Intent shareIntent = new Intent(Intent.ACTION_SEND);
                     shareIntent.setType("text/plain");
                     shareIntent.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.app_name));
-                    String shareMessage = "Download this app and Help Donor & Recipient of Plasma to Connect Each Other";
-                    shareMessage = shareMessage + "\nDownload Link :" + "\nhttps://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
+                    shareMessage = shareMessage + applink+"\n\n"+shareMessage_h + applink_h;
                     shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
                     startActivity(Intent.createChooser(shareIntent, "choose one"));
                 } catch (Exception e) {
