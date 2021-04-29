@@ -24,8 +24,13 @@ import in.plasmado.R;
 
 public class ParentHelper {
 
-    public static String timeStamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date());
+
     public static final SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+
+    public static String getTimestamp(){
+
+        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date());
+    }
 
     public static void replaceFragment(FragmentActivity activity, int layout, Fragment fragment){
         activity.getSupportFragmentManager()

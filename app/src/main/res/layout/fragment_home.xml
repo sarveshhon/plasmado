@@ -43,7 +43,7 @@
                             android:scaleType="fitCenter"
                             android:src="@drawable/ic_history"
                             android:layout_width="match_parent"
-                            android:layout_height="100dp"/>
+                            android:layout_height="80dp"/>
 
                         <TextView
                             android:text="History"
@@ -77,7 +77,7 @@
                             android:scaleType="fitCenter"
                             android:src="@drawable/ic_user"
                             android:layout_width="match_parent"
-                            android:layout_height="100dp"/>
+                            android:layout_height="80dp"/>
 
                         <TextView
                             android:text="Profile"
@@ -110,7 +110,7 @@
                             android:scaleType="fitCenter"
                             android:src="@drawable/ic_ask"
                             android:layout_width="match_parent"
-                            android:layout_height="100dp"/>
+                            android:layout_height="80dp"/>
 
                         <TextView
                             android:text="Request"
@@ -131,10 +131,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvHome"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
+                <include
+                    android:visibility="gone"
+                    android:id="@+id/inf"
+                    layout="@layout/not_found"/>
 
 
             </FrameLayout>

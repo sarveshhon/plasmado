@@ -43,7 +43,7 @@ import static in.plasmado.helper.ParamHelper.PHONE;
 import static in.plasmado.helper.ParamHelper.PINCODE;
 import static in.plasmado.helper.ParamHelper.STATE;
 import static in.plasmado.helper.ParentHelper.checkInternet;
-import static in.plasmado.helper.ParentHelper.timeStamp;
+import static in.plasmado.helper.ParentHelper.getTimestamp;
 import static in.plasmado.helper.UrlHelper.BASE_KEY;
 import static in.plasmado.helper.UrlHelper.BASE_URL;
 import static in.plasmado.helper.UrlHelper.REGISTRATION;
@@ -56,8 +56,8 @@ public class RegisterFragment extends Fragment {
     String bloodGroups[] = {"Select Blood", "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"};
     String gender[] = {"Select Gender", "Male", "Female", "Trans"};
     String states[] = {"Select State", "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh",
-            "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra","Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha","Punjab","Rajasthan",
-            "Sikkim", "Tamil Nadu","Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Andaman and Nicobar", "Chandigarh", "Dadra and Nagar Haveli", "Delhi", "Ladakh", "Lakshadweep", "Jammu and Kashmir", "Puducherry"};
+            "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan",
+            "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Andaman and Nicobar", "Chandigarh", "Dadra and Nagar Haveli", "Delhi", "Ladakh", "Lakshadweep", "Jammu and Kashmir", "Puducherry"};
     ArrayAdapter adapterBloodGroup, adapterGender, adapterStates;
 
     private FragmentRegisterBinding mBinding;
@@ -89,22 +89,22 @@ public class RegisterFragment extends Fragment {
         adapterStates = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, states);
         mBinding.spinnerStates.setAdapter(adapterStates);
 
-        mBinding.tvAgreement.setText(Html.fromHtml("Agree with our "+getResources().getString(R.string.pp)+" & "+getResources().getString(R.string.tandc)));
+        mBinding.tvAgreement.setText(Html.fromHtml("Agree with our " + getResources().getString(R.string.pp) + " & " + getResources().getString(R.string.tandc)));
         mBinding.tvAgreement.setMovementMethod(LinkMovementMethod.getInstance());
 
         mBinding.btnCreateAccount.setOnClickListener(v -> {
 
             if (checkFields()) {
-                if(checkInternet(getContext())) {
-                    if(mBinding.cbAgreement.isChecked()){
+                if (checkInternet(getContext())) {
+                    if (mBinding.cbAgreement.isChecked()) {
                         registerUser();
                         Toast.makeText(getActivity(), "Creating Account", Toast.LENGTH_SHORT).show();
                         mBinding.btnCreateAccount.setEnabled(false);
                         new Handler().postDelayed(() -> mBinding.btnCreateAccount.setEnabled(true), 5000);
-                    }else{
+                    } else {
                         Toast.makeText(getContext(), "Click on Checkbox to Agree.", Toast.LENGTH_SHORT).show();
                     }
-                }else{
+                } else {
                     Toast.makeText(getContext(), "Please Turn On Internet Connection.", Toast.LENGTH_SHORT).show();
                 }
             } else {
@@ -141,17 +141,15 @@ public class RegisterFragment extends Fragment {
                 map.put(STATE, states[mBinding.spinnerStates.getSelectedItemPosition()]);
                 map.put(GENDER, gender[mBinding.spinnerGender.getSelectedItemPosition()]);
                 map.put(BLOODGROUP, bloodGroups[mBinding.spinnerBloodGroup.getSelectedItemPosition()]);
-                map.put(DATETIME, timeStamp);
+                map.put(DATETIME, getTimestamp());
                 map.put(PASSWORD, mBinding.etPassword.getText().toString());
 
 
                 return map;
             }
         };
-
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(stringRequest);
-
 
     }
 
@@ -171,7 +169,7 @@ public class RegisterFragment extends Fragment {
 
         if (!etFirstName.equals("")) {
             if (!etLastName.equals("")) {
-                if (!etPhone.equals("")) {
+                if (!etPhone.equals("") && etPhone.length() == 10) {
                     if (!etPassword.equals("")) {
                         if (!etConfirmPassword.equals("")) {
                             if (etPassword.equals(etConfirmPassword)) {
@@ -179,16 +177,12 @@ public class RegisterFragment extends Fragment {
                                     if (!etDistrict.equals("")) {
                                         if (!etLandmark.equals("")) {
                                             if (!etCity.equals("")) {
-                                                if (!etPin.equals("")) {
+                                                if (!etPin.equals("") && etPin.length() == 6) {
                                                     if (mBinding.spinnerBloodGroup.getSelectedItemPosition() != 0) {
                                                         if (mBinding.spinnerGender.getSelectedItemPosition() != 0) {
                                                             if (!etAge.equals("")) {
-                                                                if (isValidEmail(etEmail)) {
-                                                                    if (etPhone.length() == 10) {
-                                                                        return true;
-                                                                    } else {
-                                                                        mBinding.etPhone.setError("Enter 10 Digit Number");
-                                                                    }
+                                                                if (isValidEmail(etEmail) && !etEmail.equals("")) {
+                                                                    return true;
                                                                 } else {
                                                                     mBinding.etEmail.setError("Enter Valid Email");
                                                                 }
@@ -204,7 +198,7 @@ public class RegisterFragment extends Fragment {
                                                     }
 
                                                 } else {
-                                                    mBinding.etPin.setError("Enter Pin");
+                                                    mBinding.etPin.setError("Enter Valid Pin");
                                                 }
 
                                             } else {
@@ -235,7 +229,7 @@ public class RegisterFragment extends Fragment {
                     }
 
                 } else {
-                    mBinding.etPhone.setError("Enter Phone");
+                    mBinding.etPhone.setError("Enter Valid Phone");
                 }
             } else {
                 mBinding.etLastName.setError("Enter Last Name");
@@ -244,22 +238,6 @@ public class RegisterFragment extends Fragment {
             mBinding.etFirstName.setError("Enter First Name");
         }
         return false;
-    }
-
-    private void clearFields() {
-
-
-        mBinding.etFirstName.setText("");
-        mBinding.etLastName.setText("");
-        mBinding.etPhone.setText("");
-        mBinding.etPassword.setText("");
-        mBinding.etConfirmPassword.setText("");
-        mBinding.etDistrict.setText("");
-        mBinding.etLandmark.getText().toString();
-        mBinding.etCity.getText().toString();
-        mBinding.etAge.getText().toString();
-        mBinding.etPin.getText().toString();
-
     }
 
     public static boolean isValidEmail(CharSequence target) {

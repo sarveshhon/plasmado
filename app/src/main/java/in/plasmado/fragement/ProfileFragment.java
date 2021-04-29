@@ -1,5 +1,7 @@
 package in.plasmado.fragement;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import in.plasmado.MainActivity;
 import in.plasmado.R;
 import in.plasmado.databinding.FragmentProfileBinding;
 
@@ -25,6 +28,7 @@ import static in.plasmado.helper.ParamHelper.NAME;
 import static in.plasmado.helper.ParamHelper.PHONE;
 import static in.plasmado.helper.ParamHelper.PINCODE;
 import static in.plasmado.helper.ParamHelper.STATE;
+import static in.plasmado.helper.ParentHelper.startAct;
 
 
 public class ProfileFragment extends Fragment {
@@ -53,7 +57,6 @@ public class ProfileFragment extends Fragment {
         mBinding.tvState.setText("State: "+sharedpreferences.getString(STATE,"unknown"));
         mBinding.tvGender.setText("Gender: "+sharedpreferences.getString(GENDER,"unknown"));
         mBinding.tvBloodGroup.setText("Blood Group: "+sharedpreferences.getString(BLOODGROUP,"unknown"));
-
 
         return mBinding.getRoot();
 

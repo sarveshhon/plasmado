@@ -1,7 +1,6 @@
 package in.plasmado.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,30 +27,13 @@ import java.util.Map;
 
 import in.plasmado.R;
 import in.plasmado.model.HistoryModel;
-import in.plasmado.model.RequestModel;
 
-import static in.plasmado.MainActivity.sharedpreferences;
-import static in.plasmado.helper.ParamHelper.AGE;
-import static in.plasmado.helper.ParamHelper.BLOODGROUP;
-import static in.plasmado.helper.ParamHelper.CITY;
-import static in.plasmado.helper.ParamHelper.DATETIME;
-import static in.plasmado.helper.ParamHelper.DISTRICT;
-import static in.plasmado.helper.ParamHelper.EMAIl;
-import static in.plasmado.helper.ParamHelper.GENDER;
 import static in.plasmado.helper.ParamHelper.ID;
-import static in.plasmado.helper.ParamHelper.LANDMARK;
-import static in.plasmado.helper.ParamHelper.NAME;
-import static in.plasmado.helper.ParamHelper.PHONE;
-import static in.plasmado.helper.ParamHelper.PINCODE;
-import static in.plasmado.helper.ParamHelper.STAGE;
-import static in.plasmado.helper.ParamHelper.STATE;
 import static in.plasmado.helper.ParentHelper.checkInternet;
 import static in.plasmado.helper.ParentHelper.inputFormat;
-import static in.plasmado.helper.ParentHelper.timeStamp;
 import static in.plasmado.helper.UrlHelper.BASE_KEY;
 import static in.plasmado.helper.UrlHelper.BASE_URL;
 import static in.plasmado.helper.UrlHelper.DELETE;
-import static in.plasmado.helper.UrlHelper.REQUEST;
 import static in.plasmado.helper.UrlHelper.UPDATE;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
@@ -81,17 +63,17 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         holder.tvGender.setText("Gender: " + list.get(position).getGender());
         holder.tvName.setText(list.get(position).getName());
         holder.tvAddress.setText(list.get(position).getLandmark() + ", " + list.get(position).getCity() + ", " + list.get(position).getDistrict() + ", " + list.get(position).getState() + ", " + list.get(position).getPin());
-        if(list.get(position).getStage().equals("true")){
+        if (list.get(position).getStage().equals("true")) {
             holder.tvStage.setVisibility(View.VISIBLE);
             holder.tvStage.setTextColor(context.getResources().getColor(R.color.green));
             holder.tvStage.setText("Request Completed");
             holder.llBtn.setVisibility(View.GONE);
-        }else if(list.get(position).getStage().equals("false")){
+        } else if (list.get(position).getStage().equals("false")) {
             holder.tvStage.setTextColor(context.getResources().getColor(R.color.black_light));
             holder.tvStage.setVisibility(View.VISIBLE);
             holder.tvStage.setText("Pending Request");
             holder.llBtn.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             holder.tvStage.setTextColor(context.getResources().getColor(R.color.black_light));
             holder.tvStage.setVisibility(View.GONE);
             holder.llBtn.setVisibility(View.GONE);
@@ -100,7 +82,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         Date date = null;
         try {
             date = inputFormat.parse(list.get(position).getDatetime());
-            String niceDateStr = (String) DateUtils.getRelativeTimeSpanString(date.getTime() , Calendar.getInstance().getTimeInMillis(), DateUtils.MINUTE_IN_MILLIS);
+            String niceDateStr = (String) DateUtils.getRelativeTimeSpanString(date.getTime(), Calendar.getInstance().getTimeInMillis(), DateUtils.MINUTE_IN_MILLIS);
 
             holder.tvTimeDate.setText("Requested : " + niceDateStr);
         } catch (ParseException e) {
@@ -111,20 +93,20 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         });
 
         holder.btnCancle.setOnClickListener(v -> {
-            if(checkInternet(context)){
+            if (checkInternet(context)) {
                 holder.llBtn.setVisibility(View.GONE);
-                cancleRequest( list.get(position).get_id());
+                cancleRequest(list.get(position).get_id());
                 Toast.makeText(context, "Request Canceled", Toast.LENGTH_SHORT).show();
-            }else{
+            } else {
                 Toast.makeText(context, "Please Turn ON Internet Connection.", Toast.LENGTH_SHORT).show();
             }
         });
         holder.btnCompleted.setOnClickListener(v -> {
-            if(checkInternet(context)) {
+            if (checkInternet(context)) {
                 holder.llBtn.setVisibility(View.GONE);
                 completeRequest(list.get(position).get_id());
                 Toast.makeText(context, "Request Completed", Toast.LENGTH_SHORT).show();
-            }else{
+            } else {
                 Toast.makeText(context, "Please Turn ON Internet Connection.", Toast.LENGTH_SHORT).show();
             }
         });
@@ -158,19 +140,19 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         }
     }
 
-    private void cancleRequest(String _id){
+    private void cancleRequest(String _id) {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL+ DELETE + BASE_KEY, response -> {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL + DELETE + BASE_KEY, response -> {
 
         }, error -> {
 
-        }){
+        }) {
             @Nullable
             @Override
             protected Map<String, String> getParams() {
 
                 Map<String, String> map = new HashMap<>();
-                map.put(ID,_id);
+                map.put(ID, _id);
 
                 return map;
             }
@@ -181,19 +163,19 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     }
 
-    private void completeRequest(String _id){
+    private void completeRequest(String _id) {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL+ UPDATE + BASE_KEY, response -> {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL + UPDATE + BASE_KEY, response -> {
 
         }, error -> {
 
-        }){
+        }) {
             @Nullable
             @Override
             protected Map<String, String> getParams() {
 
                 Map<String, String> map = new HashMap<>();
-                map.put(ID,_id);
+                map.put(ID, _id);
 
                 return map;
             }

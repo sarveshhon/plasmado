@@ -28,11 +28,8 @@ import java.util.List;
 import java.util.Map;
 
 import in.plasmado.R;
-import in.plasmado.adapter.HistoryAdapter;
 import in.plasmado.adapter.RequestAdapter;
 import in.plasmado.databinding.FragmentHomeBinding;
-import in.plasmado.helper.ParamHelper;
-import in.plasmado.model.HistoryModel;
 import in.plasmado.model.RequestModel;
 
 import static in.plasmado.MainActivity.sharedpreferences;
@@ -52,13 +49,12 @@ import static in.plasmado.helper.ParamHelper.STAGE;
 import static in.plasmado.helper.ParamHelper.STATE;
 import static in.plasmado.helper.ParentHelper.addFragment;
 import static in.plasmado.helper.ParentHelper.checkInternet;
+import static in.plasmado.helper.ParentHelper.getTimestamp;
 import static in.plasmado.helper.ParentHelper.showCustomDialog;
-import static in.plasmado.helper.ParentHelper.timeStamp;
 import static in.plasmado.helper.UrlHelper.BASE_KEY;
 import static in.plasmado.helper.UrlHelper.BASE_URL;
 import static in.plasmado.helper.UrlHelper.HISTORY;
 import static in.plasmado.helper.UrlHelper.REQUEST;
-import static in.plasmado.helper.UrlHelper.databaseReference;
 
 public class HomeFragment extends Fragment {
 
@@ -94,39 +90,39 @@ public class HomeFragment extends Fragment {
         dialog.findViewById(R.id.btnYes).setOnClickListener(v -> {
             requestBlood();
             dialog.dismiss();
-            Toast.makeText(getActivity(), "Plasma Requested", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Plasma Requested.", Toast.LENGTH_LONG).show();
         });
 
         mBinding.cvHistory.setOnClickListener(v -> {
-            if (checkInternet(getContext())){
+            if (checkInternet(getContext())) {
                 addFragment(getActivity(), R.id.flHomeContainer, new HistoryFragment());
-            }else{
+            } else {
                 Toast.makeText(getContext(), "Please Turn ON Internet Connection.", Toast.LENGTH_SHORT).show();
             }
         });
 
         mBinding.cvProfile.setOnClickListener(v -> {
-            if(checkInternet(getContext())) {
+            if (checkInternet(getContext())) {
                 addFragment(getActivity(), R.id.flHomeContainer, new ProfileFragment());
-            }else {
+            } else {
                 Toast.makeText(getContext(), "Please Turn ON Internet Connection.", Toast.LENGTH_SHORT).show();
             }
         });
 
         mBinding.cvRequest.setOnClickListener(v -> {
-            if(checkInternet(getContext())) {
+            if (checkInternet(getContext())) {
                 dialog.show();
-            }else {
+            } else {
                 Toast.makeText(getContext(), "Please Turn ON Internet Connection.", Toast.LENGTH_SHORT).show();
             }
 
         });
 
         mBinding.swipeRefresh.setOnRefreshListener(() -> {
-            if(checkInternet(getContext())) {
+            if (checkInternet(getContext())) {
                 mBinding.swipeRefresh.setRefreshing(true);
                 loadRequestData();
-            }else{
+            } else {
                 Toast.makeText(getContext(), "Please Turn ON Internet Connection.", Toast.LENGTH_SHORT).show();
             }
         });
@@ -140,13 +136,13 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private void loadRequestData(){
+    private void loadRequestData() {
         list.clear();
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, BASE_URL+ REQUEST +BASE_KEY, response -> {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, BASE_URL + REQUEST + BASE_KEY, response -> {
 
             try {
                 JSONArray jsonArray = new JSONArray(response);
-                for(int i=0; i<jsonArray.length(); i++){
+                for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     list.add(new RequestModel(jsonObject.getString(ID),
                             jsonObject.getString(NAME),
@@ -163,18 +159,25 @@ public class HomeFragment extends Fragment {
                             jsonObject.getString(DATETIME)
                     ));
                 }
+
+                if (jsonArray.length() == 0) {
+                    mBinding.inf.getRoot().setVisibility(View.VISIBLE);
+                } else {
+                    mBinding.inf.getRoot().setVisibility(View.GONE);
+                }
+
                 mBinding.swipeRefresh.setRefreshing(false);
                 mBinding.rvHome.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
                 RequestAdapter requestAdapter = new RequestAdapter(getActivity(), list);
                 mBinding.rvHome.setAdapter(requestAdapter);
                 requestAdapter.notifyDataSetChanged();
 
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
         }, error -> {
 
-        }){
+        }) {
 
         };
 
@@ -182,31 +185,31 @@ public class HomeFragment extends Fragment {
         requestQueue.add(stringRequest);
     }
 
-    private void requestBlood(){
+    private void requestBlood() {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL+ REQUEST + BASE_KEY, response -> {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL + REQUEST + BASE_KEY, response -> {
 
         }, error -> {
 
-        }){
+        }) {
             @Nullable
             @Override
             protected Map<String, String> getParams() {
 
                 Map<String, String> map = new HashMap<>();
-                map.put(NAME,sharedpreferences.getString(NAME,"unknown"));
-                map.put(PHONE,sharedpreferences.getString(PHONE,"unknown"));
-                map.put(EMAIl,sharedpreferences.getString(EMAIl,"unknown"));
-                map.put(AGE,sharedpreferences.getString(AGE,"unknown"));
-                map.put(PINCODE,sharedpreferences.getString(PINCODE,"unknown"));
-                map.put(CITY,sharedpreferences.getString(CITY,"unknown"));
-                map.put(DISTRICT,sharedpreferences.getString(DISTRICT,"unknown"));
-                map.put(LANDMARK,sharedpreferences.getString(LANDMARK,"unknown"));
-                map.put(STATE,sharedpreferences.getString(STATE,"unknown"));
-                map.put(GENDER,sharedpreferences.getString(GENDER,"unknown"));
-                map.put(BLOODGROUP,sharedpreferences.getString(BLOODGROUP,"unknown"));
-                map.put(STAGE,"false");
-                map.put(DATETIME,timeStamp);
+                map.put(NAME, sharedpreferences.getString(NAME, "unknown"));
+                map.put(PHONE, sharedpreferences.getString(PHONE, "unknown"));
+                map.put(EMAIl, sharedpreferences.getString(EMAIl, "unknown"));
+                map.put(AGE, sharedpreferences.getString(AGE, "unknown"));
+                map.put(PINCODE, sharedpreferences.getString(PINCODE, "unknown"));
+                map.put(CITY, sharedpreferences.getString(CITY, "unknown"));
+                map.put(DISTRICT, sharedpreferences.getString(DISTRICT, "unknown"));
+                map.put(LANDMARK, sharedpreferences.getString(LANDMARK, "unknown"));
+                map.put(STATE, sharedpreferences.getString(STATE, "unknown"));
+                map.put(GENDER, sharedpreferences.getString(GENDER, "unknown"));
+                map.put(BLOODGROUP, sharedpreferences.getString(BLOODGROUP, "unknown"));
+                map.put(STAGE, "false");
+                map.put(DATETIME, getTimestamp());
 
                 return map;
             }
@@ -219,34 +222,34 @@ public class HomeFragment extends Fragment {
     }
 
 
-    public void checkRequestAvailable(){
+    public void checkRequestAvailable() {
         list.clear();
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL+ HISTORY +BASE_KEY, response -> {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL + HISTORY + BASE_KEY, response -> {
 
             try {
                 JSONArray jsonArray = new JSONArray(response);
-                for(int i=0; i<jsonArray.length(); i++){
+                for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                    if(jsonObject.getString("stage").equals("true")){
-                        count ++;
+                    if (jsonObject.getString("stage").equals("true")) {
+                        count++;
                     }
 
 
                 }
 
 
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
         }, error -> {
 
-        }){
+        }) {
             @Nullable
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String > map = new HashMap<>();
-                map.put(PHONE,sharedpreferences.getString(PHONE,"unknown"));
+                Map<String, String> map = new HashMap<>();
+                map.put(PHONE, sharedpreferences.getString(PHONE, "unknown"));
 
                 return map;
             }

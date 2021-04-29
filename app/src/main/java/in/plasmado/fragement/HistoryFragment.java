@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -18,6 +19,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -73,6 +75,9 @@ public class HistoryFragment extends Fragment {
 
         mBinding = FragmentHistoryBinding.inflate(getLayoutInflater());
 
+        ImageView imageView = mBinding.getRoot().findViewById(R.id.ivNotFound);
+        Glide.with(getContext()).load(R.raw.ic_not_found).into(imageView);
+
         loadHistoryData();
 
         mBinding.swipeRefresh.setOnRefreshListener(() -> {
@@ -121,6 +126,13 @@ public class HistoryFragment extends Fragment {
                             jsonObject.getString(STAGE)
                     ));
                 }
+
+                if(jsonArray.length() == 0){
+                    mBinding.inf.getRoot().setVisibility(View.VISIBLE);
+                }else{
+                    mBinding.inf.getRoot().setVisibility(View.GONE);
+                }
+
                 mBinding.swipeRefresh.setRefreshing(false);
                 mBinding.rvHistory.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
                 HistoryAdapter historyAdapter = new HistoryAdapter(getActivity(), list);
