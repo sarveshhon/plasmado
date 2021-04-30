@@ -35,7 +35,7 @@ import static in.plasmado.helper.ParentHelper.showCustomDialog;
 public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHolder> {
 
     int PERMISSION_ALL = 1;
-    String[] PERMISSIONS = { Manifest.permission.CALL_PHONE};
+    String[] PERMISSIONS = {Manifest.permission.CALL_PHONE};
     Dialog dialog;
 
     Context context;
@@ -69,7 +69,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
         Date date = null;
         try {
             date = inputFormat.parse(list.get(position).getDatetime());
-            String niceDateStr = (String) DateUtils.getRelativeTimeSpanString(date.getTime() , Calendar.getInstance().getTimeInMillis(), DateUtils.MINUTE_IN_MILLIS);
+            String niceDateStr = (String) DateUtils.getRelativeTimeSpanString(date.getTime(), Calendar.getInstance().getTimeInMillis(), DateUtils.MINUTE_IN_MILLIS);
 
             holder.tvTimeDate.setText("Requested : " + niceDateStr);
         } catch (ParseException e) {
@@ -84,22 +84,23 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
 
             dialog.findViewById(R.id.btnYes).setOnClickListener(i -> {
                 dialog.dismiss();
-                if(!hasPermissions(context, PERMISSIONS)){
+                if (!hasPermissions(context, PERMISSIONS)) {
                     ActivityCompat.requestPermissions((Activity) context, PERMISSIONS, PERMISSION_ALL);
-                }else{
+                } else {
                     Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:"+list.get(position).getPhone()));
+                    callIntent.setData(Uri.parse("tel:" + list.get(position).getPhone()));
                     context.startActivity(callIntent);
                 }
 
             });
 
-            if(!(list.get(position).getPhone().equals(sharedpreferences.getString(PHONE,"unknown")))){
+            if (!(list.get(position).getPhone().equals(sharedpreferences.getString(PHONE, "unknown")))) {
                 dialog.show();
-            }else {
+            } else {
                 Toast.makeText(context, "You Can't Call Yourself", Toast.LENGTH_SHORT).show();
             }
         });
+
 
     }
 
@@ -123,6 +124,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
             tvName = itemView.findViewById(R.id.tvName);
         }
     }
+
     public static boolean hasPermissions(Context context, String... permissions) {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
             for (String permission : permissions) {

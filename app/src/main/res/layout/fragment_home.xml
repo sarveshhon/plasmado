@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipeRefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/swipeRefresh"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragement.HomeFragment">
 
     <androidx.core.widget.NestedScrollView
@@ -13,13 +13,12 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
 
             <TextView
-                android:text="@string/note"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -28,45 +27,49 @@
                 android:fontFamily="sans-serif"
                 android:gravity="center"
                 android:padding="2dp"
+                android:text="@string/note"
                 android:textAllCaps="false"
                 android:textColor="#36324a"
                 android:textSize="12sp" />
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_margin="6dp"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="6dp"
+                android:orientation="horizontal">
 
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cvHistory"
-                    app:cardElevation="3dp"
-                    android:layout_weight="1"
-                    android:layout_margin="6dp"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="6dp"
+                    android:layout_weight="1"
                     app:cardCornerRadius="10dp"
-                    android:layout_height="wrap_content">
+                    app:cardElevation="3dp">
 
                     <LinearLayout
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
                         <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:contentDescription="@string/icon"
                             android:padding="14dp"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/ic_history"
-                            android:layout_width="match_parent"
-                            android:layout_height="80dp"/>
+                            android:src="@drawable/ic_history" />
 
                         <TextView
-                            android:text="History"
-                            android:layout_gravity="bottom"
-                            android:gravity="center_horizontal"
-                            android:layout_margin="3dp"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:layout_margin="3dp"
+                            android:gravity="center_horizontal"
+                            android:text="@string/history" />
 
                     </LinearLayout>
 
@@ -74,66 +77,68 @@
 
 
                 <androidx.cardview.widget.CardView
-                    app:cardElevation="3dp"
                     android:id="@+id/cvProfile"
-                    android:layout_weight="1"
-                    android:layout_margin="6dp"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="6dp"
+                    android:layout_weight="1"
                     app:cardCornerRadius="10dp"
-                    android:layout_height="wrap_content">
+                    app:cardElevation="3dp">
 
                     <LinearLayout
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
                         <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:contentDescription="@string/icon"
                             android:padding="14dp"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/ic_user"
-                            android:layout_width="match_parent"
-                            android:layout_height="80dp"/>
+                            android:src="@drawable/ic_user" />
 
                         <TextView
-                            android:text="Profile"
-                            android:layout_gravity="bottom"
-                            android:gravity="center_horizontal"
-                            android:layout_margin="3dp"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:layout_margin="3dp"
+                            android:gravity="center_horizontal"
+                            android:text="@string/profile" />
 
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    app:cardElevation="3dp"
-                    android:layout_weight="1"
-                    android:layout_margin="6dp"
                     android:id="@+id/cvRequest"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="6dp"
+                    android:layout_weight="1"
                     app:cardCornerRadius="10dp"
-                    android:layout_height="wrap_content">
+                    app:cardElevation="3dp">
 
                     <LinearLayout
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
                         <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:contentDescription="@string/icon"
                             android:padding="14dp"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/ic_ask"
-                            android:layout_width="match_parent"
-                            android:layout_height="80dp"/>
+                            android:src="@drawable/ic_ask" />
 
                         <TextView
-                            android:text="Request"
-                            android:layout_gravity="bottom"
-                            android:gravity="center_horizontal"
-                            android:layout_margin="3dp"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:layout_margin="3dp"
+                            android:gravity="center_horizontal"
+                            android:text="@string/request" />
 
                     </LinearLayout>
 
@@ -141,20 +146,58 @@
 
             </LinearLayout>
 
-            <FrameLayout
-                android:orientation="vertical"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/cbState"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/state" />
+
+                <CheckBox
+                    android:id="@+id/cbDistrict"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/district" />
+
+                <CheckBox
+                    android:id="@+id/cbCity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/city" />
+
+                <CheckBox
+                    android:id="@+id/cbPincode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/pincode" />
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvHome"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent" />
+
                 <include
-                    android:visibility="gone"
                     android:id="@+id/inf"
-                    layout="@layout/not_found"/>
+                    layout="@layout/not_found"
+                    android:visibility="gone" />
 
 
             </FrameLayout>

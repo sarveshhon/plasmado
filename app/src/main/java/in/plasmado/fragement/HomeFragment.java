@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -49,6 +48,7 @@ import static in.plasmado.helper.ParamHelper.STAGE;
 import static in.plasmado.helper.ParamHelper.STATE;
 import static in.plasmado.helper.ParentHelper.addFragment;
 import static in.plasmado.helper.ParentHelper.checkInternet;
+import static in.plasmado.helper.ParentHelper.decrypt;
 import static in.plasmado.helper.ParentHelper.getTimestamp;
 import static in.plasmado.helper.ParentHelper.showCustomDialog;
 import static in.plasmado.helper.UrlHelper.BASE_KEY;
@@ -63,6 +63,7 @@ public class HomeFragment extends Fragment {
     Dialog dialog;
 
     List<RequestModel> list = new ArrayList<>();
+    RequestAdapter requestAdapter;
 
     private static int count = 0;
 
@@ -79,6 +80,7 @@ public class HomeFragment extends Fragment {
 
         loadRequestData();
         checkRequestAvailable();
+        setCheckBox();
 
         dialog = new Dialog(getActivity());
 
@@ -94,36 +96,77 @@ public class HomeFragment extends Fragment {
         });
 
         mBinding.cvHistory.setOnClickListener(v -> {
-            if (checkInternet(getContext())) {
+            if (checkInternet(getActivity())) {
                 addFragment(getActivity(), R.id.flHomeContainer, new HistoryFragment());
             } else {
-                Toast.makeText(getContext(), "Please Turn ON Internet Connection.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Please Turn ON Internet Connection.", Toast.LENGTH_SHORT).show();
             }
         });
 
         mBinding.cvProfile.setOnClickListener(v -> {
-            if (checkInternet(getContext())) {
+            if (checkInternet(getActivity())) {
                 addFragment(getActivity(), R.id.flHomeContainer, new ProfileFragment());
             } else {
-                Toast.makeText(getContext(), "Please Turn ON Internet Connection.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Please Turn ON Internet Connection.", Toast.LENGTH_SHORT).show();
             }
         });
 
         mBinding.cvRequest.setOnClickListener(v -> {
-            if (checkInternet(getContext())) {
+            if (checkInternet(getActivity())) {
                 dialog.show();
             } else {
-                Toast.makeText(getContext(), "Please Turn ON Internet Connection.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Please Turn ON Internet Connection.", Toast.LENGTH_SHORT).show();
             }
 
         });
 
         mBinding.swipeRefresh.setOnRefreshListener(() -> {
-            if (checkInternet(getContext())) {
+            if (checkInternet(getActivity())) {
                 mBinding.swipeRefresh.setRefreshing(true);
                 loadRequestData();
+                setCheckBox();
             } else {
-                Toast.makeText(getContext(), "Please Turn ON Internet Connection.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Please Turn ON Internet Connection.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mBinding.cbState.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                loadRequestDataState();
+            } else {
+                if (!mBinding.cbDistrict.isChecked() && !mBinding.cbCity.isChecked() && !mBinding.cbPincode.isChecked()) {
+                    loadRequestData();
+                }
+            }
+        });
+
+        mBinding.cbDistrict.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                loadRequestDataDistrict();
+            } else {
+                if (!mBinding.cbState.isChecked() && !mBinding.cbCity.isChecked() && !mBinding.cbPincode.isChecked()) {
+                    loadRequestData();
+                }
+            }
+        });
+
+        mBinding.cbCity.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                loadRequestDataCity();
+            } else {
+                if (!mBinding.cbState.isChecked() && !mBinding.cbDistrict.isChecked() && !mBinding.cbPincode.isChecked()) {
+                    loadRequestData();
+                }
+            }
+        });
+
+        mBinding.cbPincode.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                loadRequestDataPincode();
+            } else {
+                if (!mBinding.cbState.isChecked() && !mBinding.cbDistrict.isChecked() && !mBinding.cbCity.isChecked()) {
+                    loadRequestData();
+                }
             }
         });
 
@@ -136,6 +179,271 @@ public class HomeFragment extends Fragment {
 
     }
 
+    private void setCheckBox() {
+        mBinding.cbState.setChecked(false);
+        mBinding.cbDistrict.setChecked(false);
+        mBinding.cbCity.setChecked(false);
+        mBinding.cbPincode.setChecked(false);
+    }
+
+    private void loadRequestDataState() {
+        final int[] count = {0};
+
+        list.clear();
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, BASE_URL + REQUEST + BASE_KEY, response -> {
+
+            try {
+                JSONArray jsonArray = new JSONArray(response);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+
+                    if (decrypt(jsonObject.getString(STATE)).equals(decrypt(sharedpreferences.getString(STATE, "unknown")))) {
+
+                        count[0] = 1;
+
+                        list.add(new RequestModel(jsonObject.getString(ID),
+                                jsonObject.getString(NAME),
+                                jsonObject.getString(PHONE),
+                                jsonObject.getString(EMAIl),
+                                jsonObject.getString(AGE),
+                                jsonObject.getString(PINCODE),
+                                jsonObject.getString(CITY),
+                                jsonObject.getString(DISTRICT),
+                                jsonObject.getString(LANDMARK),
+                                jsonObject.getString(STATE),
+                                jsonObject.getString(GENDER),
+                                jsonObject.getString(BLOODGROUP),
+                                jsonObject.getString(DATETIME)
+                        ));
+
+                    }
+                }
+
+                if (jsonArray.length() == 0) {
+                    mBinding.inf.getRoot().setVisibility(View.VISIBLE);
+                } else {
+                    mBinding.inf.getRoot().setVisibility(View.GONE);
+                }
+
+                if (count[0] == 0) {
+                    Toast.makeText(getActivity(), "Not Found", Toast.LENGTH_SHORT).show();
+                }
+
+
+                mBinding.swipeRefresh.setRefreshing(false);
+                mBinding.rvHome.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+                requestAdapter = new RequestAdapter(getActivity(), list);
+                mBinding.rvHome.setAdapter(requestAdapter);
+                requestAdapter.notifyDataSetChanged();
+
+            } catch (Exception ignored) {
+
+            }
+        }, error -> {
+
+        }) {
+
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        requestQueue.add(stringRequest);
+    }
+
+    private void loadRequestDataDistrict() {
+        final int[] count = {0};
+
+        list.clear();
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, BASE_URL + REQUEST + BASE_KEY, response -> {
+
+            try {
+                JSONArray jsonArray = new JSONArray(response);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+
+                    if (decrypt(jsonObject.getString(DISTRICT)).equals(decrypt(sharedpreferences.getString(DISTRICT, "unknown")))) {
+
+                        count[0] = 1;
+
+                        list.add(new RequestModel(jsonObject.getString(ID),
+                                jsonObject.getString(NAME),
+                                jsonObject.getString(PHONE),
+                                jsonObject.getString(EMAIl),
+                                jsonObject.getString(AGE),
+                                jsonObject.getString(PINCODE),
+                                jsonObject.getString(CITY),
+                                jsonObject.getString(DISTRICT),
+                                jsonObject.getString(LANDMARK),
+                                jsonObject.getString(STATE),
+                                jsonObject.getString(GENDER),
+                                jsonObject.getString(BLOODGROUP),
+                                jsonObject.getString(DATETIME)
+                        ));
+
+                    }
+                }
+
+                if (jsonArray.length() == 0) {
+                    mBinding.inf.getRoot().setVisibility(View.VISIBLE);
+                } else {
+                    mBinding.inf.getRoot().setVisibility(View.GONE);
+                }
+
+
+                if (count[0] == 0) {
+                    Toast.makeText(getActivity(), "Not Found", Toast.LENGTH_SHORT).show();
+                }
+
+
+                mBinding.swipeRefresh.setRefreshing(false);
+                mBinding.rvHome.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+                requestAdapter = new RequestAdapter(getActivity(), list);
+                mBinding.rvHome.setAdapter(requestAdapter);
+                requestAdapter.notifyDataSetChanged();
+
+            } catch (Exception ignored) {
+
+            }
+        }, error -> {
+
+        }) {
+
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        requestQueue.add(stringRequest);
+    }
+
+    private void loadRequestDataCity() {
+        final int[] count = {0};
+
+        list.clear();
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, BASE_URL + REQUEST + BASE_KEY, response -> {
+
+            try {
+                JSONArray jsonArray = new JSONArray(response);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+
+                    if (decrypt(jsonObject.getString(CITY)).equals(decrypt(sharedpreferences.getString(CITY, "unknown")))) {
+
+                        count[0] = 1;
+
+                        list.add(new RequestModel(jsonObject.getString(ID),
+                                jsonObject.getString(NAME),
+                                jsonObject.getString(PHONE),
+                                jsonObject.getString(EMAIl),
+                                jsonObject.getString(AGE),
+                                jsonObject.getString(PINCODE),
+                                jsonObject.getString(CITY),
+                                jsonObject.getString(DISTRICT),
+                                jsonObject.getString(LANDMARK),
+                                jsonObject.getString(STATE),
+                                jsonObject.getString(GENDER),
+                                jsonObject.getString(BLOODGROUP),
+                                jsonObject.getString(DATETIME)
+                        ));
+
+                    }
+                }
+
+                if (jsonArray.length() == 0) {
+                    mBinding.inf.getRoot().setVisibility(View.VISIBLE);
+                } else {
+                    mBinding.inf.getRoot().setVisibility(View.GONE);
+                }
+
+
+                if (count[0] == 0) {
+                    Toast.makeText(getActivity(), "Not Found", Toast.LENGTH_SHORT).show();
+                }
+
+
+                mBinding.swipeRefresh.setRefreshing(false);
+                mBinding.rvHome.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+                requestAdapter = new RequestAdapter(getActivity(), list);
+                mBinding.rvHome.setAdapter(requestAdapter);
+                requestAdapter.notifyDataSetChanged();
+
+            } catch (Exception ignored) {
+
+            }
+        }, error -> {
+
+        }) {
+
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        requestQueue.add(stringRequest);
+    }
+
+    private void loadRequestDataPincode() {
+        final int[] count = {0};
+
+        list.clear();
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, BASE_URL + REQUEST + BASE_KEY, response -> {
+
+            try {
+                JSONArray jsonArray = new JSONArray(response);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+
+                    if (decrypt(jsonObject.getString(PINCODE)).equals(decrypt(sharedpreferences.getString(PINCODE, "unknown")))) {
+
+                        count[0] = 1;
+
+                        list.add(new RequestModel(jsonObject.getString(ID),
+                                jsonObject.getString(NAME),
+                                jsonObject.getString(PHONE),
+                                jsonObject.getString(EMAIl),
+                                jsonObject.getString(AGE),
+                                jsonObject.getString(PINCODE),
+                                jsonObject.getString(CITY),
+                                jsonObject.getString(DISTRICT),
+                                jsonObject.getString(LANDMARK),
+                                jsonObject.getString(STATE),
+                                jsonObject.getString(GENDER),
+                                jsonObject.getString(BLOODGROUP),
+                                jsonObject.getString(DATETIME)
+                        ));
+
+                    }
+                }
+
+                if (jsonArray.length() == 0) {
+                    mBinding.inf.getRoot().setVisibility(View.VISIBLE);
+                } else {
+                    mBinding.inf.getRoot().setVisibility(View.GONE);
+                }
+
+                if (count[0] == 0) {
+                    Toast.makeText(getActivity(), "Not Found", Toast.LENGTH_SHORT).show();
+                }
+
+
+                mBinding.swipeRefresh.setRefreshing(false);
+                mBinding.rvHome.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+                requestAdapter = new RequestAdapter(getActivity(), list);
+                mBinding.rvHome.setAdapter(requestAdapter);
+                requestAdapter.notifyDataSetChanged();
+
+            } catch (Exception ignored) {
+
+            }
+        }, error -> {
+
+        }) {
+
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        requestQueue.add(stringRequest);
+    }
+
     private void loadRequestData() {
         list.clear();
         StringRequest stringRequest = new StringRequest(Request.Method.GET, BASE_URL + REQUEST + BASE_KEY, response -> {
@@ -144,6 +452,7 @@ public class HomeFragment extends Fragment {
                 JSONArray jsonArray = new JSONArray(response);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
+
                     list.add(new RequestModel(jsonObject.getString(ID),
                             jsonObject.getString(NAME),
                             jsonObject.getString(PHONE),
@@ -168,11 +477,11 @@ public class HomeFragment extends Fragment {
 
                 mBinding.swipeRefresh.setRefreshing(false);
                 mBinding.rvHome.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
-                RequestAdapter requestAdapter = new RequestAdapter(getActivity(), list);
+                requestAdapter = new RequestAdapter(getActivity(), list);
                 mBinding.rvHome.setAdapter(requestAdapter);
                 requestAdapter.notifyDataSetChanged();
 
-            } catch (Exception e) {
+            } catch (Exception ignored) {
 
             }
         }, error -> {
@@ -192,7 +501,6 @@ public class HomeFragment extends Fragment {
         }, error -> {
 
         }) {
-            @Nullable
             @Override
             protected Map<String, String> getParams() {
 
@@ -239,15 +547,14 @@ public class HomeFragment extends Fragment {
                 }
 
 
-            } catch (Exception e) {
+            } catch (Exception ignored) {
 
             }
         }, error -> {
 
         }) {
-            @Nullable
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
                 Map<String, String> map = new HashMap<>();
                 map.put(PHONE, sharedpreferences.getString(PHONE, "unknown"));
 

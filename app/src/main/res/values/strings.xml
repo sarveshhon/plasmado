@@ -42,6 +42,14 @@
     <string name="rate_app">Rate App</string>
     <string name="how_to_use_app">How to Use App</string>
     <string name="share_app">Share App</string>
+    <string name="history">History</string>
+    <string name="profile">Profile</string>
+    <string name="request">Request</string>
+    <string name="state">State</string>
+    <string name="district">District</string>
+    <string name="city">City</string>
+    <string name="pincode">Pincode</string>
+    <string name="icon">icon</string>
 
 
 </resources>
