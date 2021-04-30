@@ -31,6 +31,7 @@ public class HomeActivity extends AppCompatActivity {
 
     Dialog dialog;
     DatabaseReference db;
+    private static String videoLink = "https://sites.google.com/view/plasmadoapp/home";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,13 @@ public class HomeActivity extends AppCompatActivity {
                         dialog.show();
                     }else{
                         dialog.dismiss();
+                    }
+                }
+                if(snapshot.child("howtouse").exists()){
+                    try {
+                        videoLink = snapshot.child("howtouse").getValue().toString();
+                    }catch (Exception e){
+
                     }
                 }
             }
@@ -100,6 +108,10 @@ public class HomeActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     //e.toString();
                 }
+                break;
+            case R.id.mVideo:
+                Intent browserIntent0 = new Intent(Intent.ACTION_VIEW, Uri.parse(videoLink));
+                startActivity(browserIntent0);
                 break;
             case R.id.m2:
                 Uri uri = Uri.parse("market://details?id=" + getPackageName());

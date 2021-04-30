@@ -33,6 +33,15 @@
     <string name="dev">This App is Develop by an IT Student with Strong Intention of Helping Blood Plasma Recipients. This app connects Donors &amp; Recipients.</string>
 
     <string name="app_update">New Version of App is Available. Please Update Your App to Latest Version.</string>
+    <string name="logout">Logout</string>
+    <string name="about">About</string>
+    <string name="terms_amp_conditions"><![CDATA[Terms & Conditions]]></string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="email_support">Email Support</string>
+    <string name="feedback">Feedback</string>
+    <string name="rate_app">Rate App</string>
+    <string name="how_to_use_app">How to Use App</string>
+    <string name="share_app">Share App</string>
 
 
 </resources>
