@@ -140,7 +140,6 @@ public class HistoryFragment extends Fragment {
                 historyAdapter.notifyDataSetChanged();
 
             }catch (Exception e){
-
             }
         }, error -> {
 
