@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -16,21 +17,54 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import in.plasmado.HomeActivity;
 import in.plasmado.R;
 import in.plasmado.model.RequestModel;
 
 import static in.plasmado.MainActivity.sharedpreferences;
+import static in.plasmado.helper.ParamHelper.AGE;
+import static in.plasmado.helper.ParamHelper.BLOODGROUP;
+import static in.plasmado.helper.ParamHelper.CITY;
+import static in.plasmado.helper.ParamHelper.DISTRICT;
+import static in.plasmado.helper.ParamHelper.EMAIl;
+import static in.plasmado.helper.ParamHelper.GENDER;
+import static in.plasmado.helper.ParamHelper.ID;
+import static in.plasmado.helper.ParamHelper.LANDMARK;
+import static in.plasmado.helper.ParamHelper.NAME;
+import static in.plasmado.helper.ParamHelper.PASSWORD;
 import static in.plasmado.helper.ParamHelper.PHONE;
+import static in.plasmado.helper.ParamHelper.PINCODE;
+import static in.plasmado.helper.ParamHelper.STATE;
+import static in.plasmado.helper.ParentHelper.convertMongodbObjToString;
+import static in.plasmado.helper.ParentHelper.decrypt;
+import static in.plasmado.helper.ParentHelper.encrypt;
 import static in.plasmado.helper.ParentHelper.inputFormat;
 import static in.plasmado.helper.ParentHelper.showCustomDialog;
+import static in.plasmado.helper.ParentHelper.startAct;
+import static in.plasmado.helper.UrlHelper.BASE_KEY;
+import static in.plasmado.helper.UrlHelper.BASE_URL;
+import static in.plasmado.helper.UrlHelper.CALLTRACK;
+import static in.plasmado.helper.UrlHelper.LOGIN;
 
 public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHolder> {
 
@@ -87,6 +121,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                 if (!hasPermissions(context, PERMISSIONS)) {
                     ActivityCompat.requestPermissions((Activity) context, PERMISSIONS, PERMISSION_ALL);
                 } else {
+                    callTrack(list.get(position).getPhone(),list.get(position).getName(),list.get(position).getEmail());
                     Intent callIntent = new Intent(Intent.ACTION_CALL);
                     callIntent.setData(Uri.parse("tel:" + list.get(position).getPhone()));
                     context.startActivity(callIntent);
@@ -135,4 +170,34 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
         }
         return true;
     }
+
+
+    private void callTrack(String toPhone, String toName, String toEmail) {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL + CALLTRACK + BASE_KEY, response -> {
+
+        }, error -> {
+        }) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> map = new HashMap<>();
+                map.put("fromName", decrypt(sharedpreferences.getString(NAME, "unknown")));
+                map.put("toName", toName);
+                map.put("fromPhone", decrypt(sharedpreferences.getString(PHONE, "unknown")));
+                map.put("toPhone", toPhone);
+                map.put("fromEmail", decrypt(sharedpreferences.getString(EMAIl, "unknown")));
+                map.put("toEmail", toEmail);
+
+                return map;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+
+    }
+
+
 }

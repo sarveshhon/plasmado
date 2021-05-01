@@ -7,6 +7,7 @@ public class UrlHelper {
 
     public static String REGISTRATION = "registration";
     public static String LOGIN = "login";
+    public static String CALLTRACK = "calltrack";
     public static String REQUEST = "request";
     public static String HISTORY = "history";
     public static String DELETE = "delete";
