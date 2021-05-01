@@ -30,6 +30,7 @@ public class HomeActivity extends AppCompatActivity {
     Dialog dialog, dialogBlock;
     DatabaseReference db;
     private static String videoLink = "https://sites.google.com/view/plasmadoapp/home";
+    String TEMP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
