@@ -24,12 +24,13 @@ import com.google.firebase.database.ValueEventListener;
 import in.plasmado.fragement.HomeFragment;
 
 import static in.plasmado.MainActivity.sharedpreferences;
+import static in.plasmado.helper.ParamHelper.ID;
 import static in.plasmado.helper.ParentHelper.replaceFragment;
 import static in.plasmado.helper.ParentHelper.showCustomDialog;
 
 public class HomeActivity extends AppCompatActivity {
 
-    Dialog dialog;
+    Dialog dialog,dialogBlock;
     DatabaseReference db;
     private static String videoLink = "https://sites.google.com/view/plasmadoapp/home";
 
@@ -41,6 +42,7 @@ public class HomeActivity extends AppCompatActivity {
         replaceFragment(HomeActivity.this, R.id.flHomeContainer, new HomeFragment());
 
         dialog = new Dialog(HomeActivity.this);
+        dialogBlock = new Dialog(HomeActivity.this);
 
         // Configure Dialog Propertied
         showCustomDialog(dialog, getResources().getString(R.string.app_update), R.layout.dialog_update);
@@ -54,12 +56,26 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        // Configure Dialog Propertied
+        showCustomDialog(dialogBlock, getResources().getString(R.string.app_block), R.layout.dialog_block);
+        dialogBlock.findViewById(R.id.btnYes).setOnClickListener(v -> {
+            Intent intent2 = new Intent(Intent.ACTION_SEND);
+            String[] recipients2 = {"plasmadoapp@gmail.com"};
+            intent2.putExtra(Intent.EXTRA_EMAIL, recipients2);
+            intent2.putExtra(Intent.EXTRA_SUBJECT, "PlasmaDo Block Email Support | "+sharedpreferences.getString(ID,"Unknown"));
+            intent2.putExtra(Intent.EXTRA_TEXT, " ");
+            intent2.putExtra(Intent.EXTRA_CC, "mailcc@gmail.com");
+            intent2.setType("text/html");
+            intent2.setPackage("com.google.android.gm");
+            startActivity(Intent.createChooser(intent2, "Send mail"));
+        });
+
         db = FirebaseDatabase.getInstance().getReference();
         db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.child("appversion").exists()){
-                    if(!(snapshot.child("appversion").getValue().toString().equals(String.valueOf(BuildConfig.VERSION_CODE)))){
+                    if(!(snapshot.child("appversion").getValue().toString().equals(String.valueOf(db.VERSION_CODE)))){
                         dialog.show();
                     }else{
                         dialog.dismiss();
@@ -72,6 +88,15 @@ public class HomeActivity extends AppCompatActivity {
 
                     }
                 }
+
+                if(snapshot.child("users").child(sharedpreferences.getString(ID,"unknown")).exists()){
+                    if(snapshot.child("users").child(sharedpreferences.getString(ID,"unknown")).getValue().toString().equals("true")){
+                        dialogBlock.show();
+                    }else{
+                        dialogBlock.dismiss();
+                    }
+                }
+
             }
 
             @Override
@@ -79,6 +104,7 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
+
 
 
     }
@@ -126,7 +152,7 @@ public class HomeActivity extends AppCompatActivity {
                 Intent intent1 = new Intent(Intent.ACTION_SEND);
                 String[] recipients1 = {"plasmadoapp@gmail.com"};
                 intent1.putExtra(Intent.EXTRA_EMAIL, recipients1);
-                intent1.putExtra(Intent.EXTRA_SUBJECT, "PlasmaDo Feedback");
+                intent1.putExtra(Intent.EXTRA_SUBJECT, "PlasmaDo Feedback | "+sharedpreferences.getString(ID,"Unknown") );
                 intent1.putExtra(Intent.EXTRA_TEXT, " ");
                 intent1.putExtra(Intent.EXTRA_CC, "mailcc@gmail.com");
                 intent1.setType("text/html");
@@ -137,7 +163,7 @@ public class HomeActivity extends AppCompatActivity {
                 Intent intent2 = new Intent(Intent.ACTION_SEND);
                 String[] recipients2 = {"plasmadoapp@gmail.com"};
                 intent2.putExtra(Intent.EXTRA_EMAIL, recipients2);
-                intent2.putExtra(Intent.EXTRA_SUBJECT, "PlasmaDo Email Support");
+                intent2.putExtra(Intent.EXTRA_SUBJECT, "PlasmaDo Email Support | "+sharedpreferences.getString(ID,"Unknown"));
                 intent2.putExtra(Intent.EXTRA_TEXT, " ");
                 intent2.putExtra(Intent.EXTRA_CC, "mailcc@gmail.com");
                 intent2.setType("text/html");

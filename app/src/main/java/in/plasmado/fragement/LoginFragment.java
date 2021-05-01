@@ -17,6 +17,11 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import in.plasmado.BuildConfig;
 import in.plasmado.HomeActivity;
 import in.plasmado.R;
 import in.plasmado.databinding.FragmentLoginBinding;
@@ -56,6 +62,7 @@ import static in.plasmado.helper.UrlHelper.LOGIN;
 public class LoginFragment extends Fragment {
 
     public FragmentLoginBinding mBinding;
+    DatabaseReference db;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,7 +96,7 @@ public class LoginFragment extends Fragment {
             Intent intent=new Intent(Intent.ACTION_SEND);
             String[] recipients={"plasmadoapp@gmail.com"};
             intent.putExtra(Intent.EXTRA_EMAIL, recipients);
-            intent.putExtra(Intent.EXTRA_SUBJECT,"PlasmaDo Email Support");
+            intent.putExtra(Intent.EXTRA_SUBJECT,"PlasmaDo Email Support "+sharedpreferences.getString(ID,"Unknown"));
             intent.putExtra(Intent.EXTRA_TEXT," ");
             intent.putExtra(Intent.EXTRA_CC,"mailcc@gmail.com");
             intent.setType("text/html");
@@ -143,6 +150,8 @@ public class LoginFragment extends Fragment {
                 String uNumber = mBinding.etPhone.getText().toString(),
                         uPassword = mBinding.etPassword.getText().toString();
 
+                fbRegister(convertMongodbObjToString(jsonObject.getString(ID)));
+
                 if (jsonObject.getString(PHONE).equals(uNumber) && jsonObject.getString(PASSWORD).equals(encrypt(uPassword))) {
                     Toast.makeText(getActivity(), "Login Successful", Toast.LENGTH_SHORT).show();
                     startAct(getActivity(), HomeActivity.class);
@@ -192,5 +201,22 @@ public class LoginFragment extends Fragment {
     }
 
 
+    private void fbRegister(String id){
+        db = FirebaseDatabase.getInstance().getReference();
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(!(snapshot.child("users").child(id).exists())){
+                    db.child("users").child(id).setValue("false");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
 
 }

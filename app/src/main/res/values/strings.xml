@@ -33,6 +33,7 @@
     <string name="dev">This App is Develop by an IT Student with Strong Intention of Helping Blood Plasma Recipients. This app connects Donors &amp; Recipients.</string>
 
     <string name="app_update">New Version of App is Available. Please Update Your App to Latest Version.</string>
+    <string name="app_block">Due to Invalid Activity your Account has been Restricted. Contact Support to Unblock.</string>
     <string name="logout">Logout</string>
     <string name="about">About</string>
     <string name="terms_amp_conditions"><![CDATA[Terms & Conditions]]></string>
@@ -50,6 +51,7 @@
     <string name="city">City</string>
     <string name="pincode">Pincode</string>
     <string name="icon">icon</string>
+    <string name="contact_support">Contact Support</string>
 
 
 </resources>
