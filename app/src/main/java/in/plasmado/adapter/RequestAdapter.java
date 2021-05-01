@@ -132,7 +132,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
             if (!(list.get(position).getPhone().equals(sharedpreferences.getString(PHONE, "unknown")))) {
                 dialog.show();
             } else {
-                Toast.makeText(context, "You Can't Call Yourself", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "You Can't Donate to Yourself", Toast.LENGTH_SHORT).show();
             }
         });
 
