@@ -70,40 +70,46 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(Intent.createChooser(intent2, "Send mail"));
         });
 
-        db = FirebaseDatabase.getInstance().getReference();
-        db.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.child("appversion").exists()){
-                    if(!(snapshot.child("appversion").getValue().toString().equals(String.valueOf(db.VERSION_CODE)))){
-                        dialog.show();
-                    }else{
-                        dialog.dismiss();
+        try {
+            db = FirebaseDatabase.getInstance().getReference();
+            db.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.child("appversion").exists()) {
+                        if (!(snapshot.child("appversion").getValue().toString().equals(String.valueOf(BuildConfig.VERSION_CODE)))) {
+                            dialog.show();
+                        } else {
+                            dialog.dismiss();
+                        }
                     }
-                }
-                if(snapshot.child("howtouse").exists()){
-                    try {
-                        videoLink = snapshot.child("howtouse").getValue().toString();
-                    }catch (Exception e){
+                    if (snapshot.child("howtouse").exists()) {
+                        try {
+                            videoLink = snapshot.child("howtouse").getValue().toString();
+                        } catch (Exception e) {
 
+                        }
                     }
-                }
 
-                if(snapshot.child("users").child(sharedpreferences.getString(ID,"unknown")).exists()){
-                    if(snapshot.child("users").child(sharedpreferences.getString(ID,"unknown")).getValue().toString().equals("true")){
-                        dialogBlock.show();
-                    }else{
-                        dialogBlock.dismiss();
+                    if (snapshot.child("users").child(sharedpreferences.getString(ID, "unknown")).exists()) {
+                        if (snapshot.child("users").child(sharedpreferences.getString(ID, "unknown")).getValue().toString().equals("true")) {
+                            dialogBlock.show();
+                        } else {
+                            dialogBlock.dismiss();
+                        }
                     }
+
                 }
 
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
 
-            }
-        });
+        }
+        catch (Exception e){
+
+        }
 
 
 
