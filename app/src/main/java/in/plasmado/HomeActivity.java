@@ -1,16 +1,13 @@
 package in.plasmado;
 
 import android.app.Dialog;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +27,7 @@ import static in.plasmado.helper.ParentHelper.showCustomDialog;
 
 public class HomeActivity extends AppCompatActivity {
 
-    Dialog dialog,dialogBlock;
+    Dialog dialog, dialogBlock;
     DatabaseReference db;
     private static String videoLink = "https://sites.google.com/view/plasmadoapp/home";
 
@@ -47,12 +44,11 @@ public class HomeActivity extends AppCompatActivity {
         // Configure Dialog Propertied
         showCustomDialog(dialog, getResources().getString(R.string.app_update), R.layout.dialog_update);
         dialog.findViewById(R.id.btnYes).setOnClickListener(v -> {
-            Uri uri = Uri.parse("market://details?id=" + getPackageName());
-            Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
+            final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
             try {
-                startActivity(myAppLinkToMarket);
-            } catch (ActivityNotFoundException e) {
-                Toast.makeText(this, " unable to find market app", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+            } catch (android.content.ActivityNotFoundException anfe) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
             }
         });
 
@@ -62,7 +58,7 @@ public class HomeActivity extends AppCompatActivity {
             Intent intent2 = new Intent(Intent.ACTION_SEND);
             String[] recipients2 = {"plasmadoapp@gmail.com"};
             intent2.putExtra(Intent.EXTRA_EMAIL, recipients2);
-            intent2.putExtra(Intent.EXTRA_SUBJECT, "PlasmaDo Block Email Support | "+sharedpreferences.getString(ID,"Unknown"));
+            intent2.putExtra(Intent.EXTRA_SUBJECT, "PlasmaDo Block Email Support | " + sharedpreferences.getString(ID, "Unknown"));
             intent2.putExtra(Intent.EXTRA_TEXT, " ");
             intent2.putExtra(Intent.EXTRA_CC, "mailcc@gmail.com");
             intent2.setType("text/html");
@@ -106,11 +102,9 @@ public class HomeActivity extends AppCompatActivity {
                 }
             });
 
-        }
-        catch (Exception e){
+        } catch (Exception e) {
 
         }
-
 
 
     }
@@ -127,8 +121,8 @@ public class HomeActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.m1:
                 try {
-                    String applink = "✅ *Download App* ✅\nhttps://play.google.com/store/apps/details?id="+ getPackageName();
-                    String applink_h = "✅ *ऐप डाउनलोड करें* ✅\nhttps://play.google.com/store/apps/details?id="+ getPackageName();
+                    String applink = "✅ *Download App* ✅\nhttps://play.google.com/store/apps/details?id=" + getPackageName();
+                    String applink_h = "✅ *ऐप डाउनलोड करें* ✅\nhttps://play.google.com/store/apps/details?id=" + getPackageName();
                     String shareMessage = getResources().getString(R.string.sharetext);
                     String shareMessage_h = getResources().getString(R.string.sharetext_h);
                     Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -146,19 +140,18 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(browserIntent0);
                 break;
             case R.id.m2:
-                Uri uri = Uri.parse("market://details?id=" + getPackageName());
-                Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
                 try {
-                    startActivity(myAppLinkToMarket);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(this, " unable to find market app", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                } catch (android.content.ActivityNotFoundException anfe) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
                 }
                 break;
             case R.id.m3:
                 Intent intent1 = new Intent(Intent.ACTION_SEND);
                 String[] recipients1 = {"plasmadoapp@gmail.com"};
                 intent1.putExtra(Intent.EXTRA_EMAIL, recipients1);
-                intent1.putExtra(Intent.EXTRA_SUBJECT, "PlasmaDo Feedback | "+sharedpreferences.getString(ID,"Unknown") );
+                intent1.putExtra(Intent.EXTRA_SUBJECT, "PlasmaDo Feedback | " + sharedpreferences.getString(ID, "Unknown"));
                 intent1.putExtra(Intent.EXTRA_TEXT, " ");
                 intent1.putExtra(Intent.EXTRA_CC, "mailcc@gmail.com");
                 intent1.setType("text/html");
@@ -169,7 +162,7 @@ public class HomeActivity extends AppCompatActivity {
                 Intent intent2 = new Intent(Intent.ACTION_SEND);
                 String[] recipients2 = {"plasmadoapp@gmail.com"};
                 intent2.putExtra(Intent.EXTRA_EMAIL, recipients2);
-                intent2.putExtra(Intent.EXTRA_SUBJECT, "PlasmaDo Email Support | "+sharedpreferences.getString(ID,"Unknown"));
+                intent2.putExtra(Intent.EXTRA_SUBJECT, "PlasmaDo Email Support | " + sharedpreferences.getString(ID, "Unknown"));
                 intent2.putExtra(Intent.EXTRA_TEXT, " ");
                 intent2.putExtra(Intent.EXTRA_CC, "mailcc@gmail.com");
                 intent2.setType("text/html");
