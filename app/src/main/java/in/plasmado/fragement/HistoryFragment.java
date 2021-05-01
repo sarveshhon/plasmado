@@ -103,9 +103,9 @@ public class HistoryFragment extends Fragment {
 
 
     public void loadHistoryData(){
-        list.clear();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL+ HISTORY +BASE_KEY, response -> {
 
+            list.clear();
             try {
                 JSONArray jsonArray = new JSONArray(response);
                 for(int i=0; i<jsonArray.length(); i++){

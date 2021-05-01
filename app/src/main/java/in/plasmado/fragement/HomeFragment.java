@@ -189,9 +189,9 @@ public class HomeFragment extends Fragment {
     private void loadRequestDataState() {
         final int[] count = {0};
 
-        list.clear();
         StringRequest stringRequest = new StringRequest(Request.Method.GET, BASE_URL + REQUEST + BASE_KEY, response -> {
 
+            list.clear();
             try {
                 JSONArray jsonArray = new JSONArray(response);
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -253,14 +253,13 @@ public class HomeFragment extends Fragment {
     private void loadRequestDataDistrict() {
         final int[] count = {0};
 
-        list.clear();
         StringRequest stringRequest = new StringRequest(Request.Method.GET, BASE_URL + REQUEST + BASE_KEY, response -> {
 
+            list.clear();
             try {
                 JSONArray jsonArray = new JSONArray(response);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
-
 
                     if (decrypt(jsonObject.getString(DISTRICT)).equals(decrypt(sharedpreferences.getString(DISTRICT, "unknown")))) {
 
@@ -318,9 +317,9 @@ public class HomeFragment extends Fragment {
     private void loadRequestDataCity() {
         final int[] count = {0};
 
-        list.clear();
         StringRequest stringRequest = new StringRequest(Request.Method.GET, BASE_URL + REQUEST + BASE_KEY, response -> {
 
+            list.clear();
             try {
                 JSONArray jsonArray = new JSONArray(response);
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -383,9 +382,9 @@ public class HomeFragment extends Fragment {
     private void loadRequestDataPincode() {
         final int[] count = {0};
 
-        list.clear();
         StringRequest stringRequest = new StringRequest(Request.Method.GET, BASE_URL + REQUEST + BASE_KEY, response -> {
 
+            list.clear();
             try {
                 JSONArray jsonArray = new JSONArray(response);
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -445,9 +444,9 @@ public class HomeFragment extends Fragment {
     }
 
     private void loadRequestData() {
-        list.clear();
         StringRequest stringRequest = new StringRequest(Request.Method.GET, BASE_URL + REQUEST + BASE_KEY, response -> {
 
+            list.clear();
             try {
                 JSONArray jsonArray = new JSONArray(response);
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -531,9 +530,9 @@ public class HomeFragment extends Fragment {
 
 
     public void checkRequestAvailable() {
-        list.clear();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL + HISTORY + BASE_KEY, response -> {
 
+            list.clear();
             try {
                 JSONArray jsonArray = new JSONArray(response);
                 for (int i = 0; i < jsonArray.length(); i++) {
